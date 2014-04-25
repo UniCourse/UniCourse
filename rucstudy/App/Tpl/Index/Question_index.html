@@ -1,0 +1,106 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>{$cname}　问题</title>
+	<include file='App/Tpl/Common/head.html' />
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+			<include file='App/Tpl/Common/leftnav-course.html'/>
+    </div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<include file='App/Tpl/Common/raise-question1.html'/>
+					</div>
+					<foreach name='question' item='v'>
+						<div class="row">
+							<include file='App/Tpl/Common/question-listed1.html'/>
+						</div>
+					</foreach>
+					<?php if ($question[0]==null): ?>
+					<div class="row">
+						<div class="panel panel-default">
+							<div class="panel-body">还没有问答呢~~快去提问吧~~</div>
+						</div>
+					</div>
+					<?php endif ?>
+					<div class="page">{$page}</div>
+				</div>
+			</div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+        <include file="App/Tpl/Common/corner.html"/>
+      </div>
+		</div>
+	</div>
+
+<script type="text/javascript">
+function focus($s){
+	$.post("{:U('Index/Question/focus')}", 
+        $s.parent().serialize(), 
+        function(data) {
+       if (data.status == 1) {
+       	$s.removeClass('focus').removeClass('btn-success').addClass('unfocus').addClass('btn-warning').text("取消关注");          
+          var num=parseInt($s.next("span").text());
+          num=num+1;
+          $s.next("span").text(num);
+          $s.unbind('click');
+          $s.click(function(event) {
+          	unfocus($s);
+          });
+         
+        } else {
+          bootbox.alert("关注失败");
+        }        
+      }, "json");	
+}
+function unfocus($s){
+	$.post("{:U('Index/Question/unFocus')}", 
+        $s.parent().serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.removeClass('unfocus').removeClass('btn-warning').addClass('focus').addClass('btn-success').text("关注");          
+          var num=parseInt($s.next("span").text());
+          num=num-1;
+          $s.next("span").text(num);
+          $s.unbind('click');
+          $s.click(function(event) {
+          	focus($s);
+          });
+        } else {
+          bootbox.alert("取消关注失败");
+        }
+      }, "json");
+}
+$(document).ready(function(){
+	$(".cancelfocus").click(function() {
+      	unfocus($(this));
+    });
+    $(".focus").click(function() {
+    	focus($(this));
+    });	
+
+    $(".btn-delete").click(function() {
+    	$s=$(this);
+      $.post("{:U('Index/Question/deleteQuestion')}", 
+        $s.parent().serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.closest(".row").fadeOut('slow');
+        } else {
+          bootbox.alert("删除竟然失败了,这怎么可能<img src='__PUBLIC__/images/kb.gif'>");
+          CA(2);
+        }
+      }, "json");
+    });
+});
+</script>
+
+	<include file="App/Tpl/Common/footer.html" />
+  <div id="info" data-activeitem="#left-question" data-activeheader="#header-course"></div>
+</body>
+</html>

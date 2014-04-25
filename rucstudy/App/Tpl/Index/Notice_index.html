@@ -1,0 +1,46 @@
+<!doctype html>
+<html <html ng-app="Unicourse">>
+<head>
+	<title>{$cname}　公告</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body >
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-course.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<div class="panel panel-primary">
+							<div class="panel-heading">公告板</div>
+							<ul class="list-group item">
+								<foreach name='home' item='v'>
+									<li class="list-group-item">
+										<small class="pull-right time">{$v["ntime"]}</small>
+										<span class="content">{$v["ncontent"]}</span>
+									</li>
+								</foreach>
+								<?php if ($home[0]==null): ?>
+								<li class="list-group-item">
+									<div class="panel-body">还没有公告呢~~</div>
+								</li>
+								<?php endif ?></ul>
+							<div class="panel-footer">
+								<div class="page">{$page}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-announcement" data-activeheader="#header-course"></div>
+</body>
+</html>

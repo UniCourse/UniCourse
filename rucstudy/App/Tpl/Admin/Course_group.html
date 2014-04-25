@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> 小组管理
+		<br><hr>
+	</div>
+	<div id="container">
+
+	<div>
+		课程号：{$cno}
+		<br/>
+		课程名称：{$cname}
+	</div>
+	<div>
+
+		<div>
+
+			<foreach name='group' item='v'>
+
+				<div class="hide">小组编号{$v.gno}课程编号{$v.cno}</div>
+				<div class="block">
+					<a href="{:U('Admin/Course/groupDetail',array('gno' =>
+						$v['gno'],'gname' => $v['gname'],'cno' => $v['cno'],'cname' => $_REQUEST['cname']))}">{$v.gname}
+						<br/>
+						<small>{$v.gnum}人</small>
+					</a>
+
+				</div>
+			</foreach>
+		</div>
+		{$page}
+	</div>
+</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

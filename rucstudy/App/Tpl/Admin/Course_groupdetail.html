@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> <a href="{:U('Admin/Course/group',array('cno'=>I('cno')))}">小组管理</a> --> 小组详细
+		<br><hr>
+	</div>
+<script>
+$(document).ready(function() {
+	$("#left-group").addClass('active');
+});
+</script>
+	<div id="container">
+		<div>
+			课程号：{$cno}
+			<br/>	
+			课程名称：{$cname}	
+		</div>
+		<div>
+			<div class="main-list">
+				<div>
+					<h4>{$gname}</h4>
+					简介：
+					<br/>	
+					{$groupdetail.0.gintro}
+					<br/>	
+					<br/>	
+					成员：
+					<br/>	
+					<foreach name="groupmember" item="v">
+						{$v.sname}：{$v.sno}
+						<br/>	
+					</foreach>
+					<br/>	
+					文件：
+					<br/>	
+					<foreach name="groupfile" item="vv">
+						<a href="__ROOT__/{$vv['gurl']}">{$vv.fname}</a>
+						<br></foreach>
+					<br/>	
+				</div>
+			</div>
+		</div>
+	</div>
+	</body>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

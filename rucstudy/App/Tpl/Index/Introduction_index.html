@@ -1,0 +1,78 @@
+<!doctype html>
+<html <html ng-app="Unicourse">>
+<head>
+	<title>{$cname}　课程介绍</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-course.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="panel panel-danger">
+						<div class="panel-heading">老师</div>
+						<table class="table">
+							<tr>
+								<td style="width:9em">姓名：</td>
+								<td>{$teacher.0.tname}</td>
+							</tr>
+							<tr>
+								<td>性别：</td>
+								<td>{$teacher.0.sex}</td>
+							</tr>
+							<tr>
+								<td>电话：</td>
+								<td>{$teacher.0.phone}</td>
+							</tr>
+							<tr>
+								<td>email：</td>
+								<td>{$teacher.0.email}</td>
+							</tr>
+							<tr>
+								<td>办公室：</td>
+								<td>{$teacher.0.office}</td>
+							</tr>
+							<tr>
+								<td>院系：</td>
+								<td>{$teacher.0.tschool}</td>
+							</tr>
+							<tr>
+								<td>备注：</td>
+								<td>{$teacher.0.tnotes}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="panel panel-info">
+						<div class="panel-heading">课程</div>
+						<table class="table">
+							<tr>
+								<td style="width:9em">考核方式：</td>
+								<td>{$teacher.0.checkway}</td>
+							</tr>
+
+							<tr>
+								<td>课程介绍：</td>
+								<td>{$teacher.0.intro}</td>
+							</tr>
+
+							<tr>
+								<td>备注：</td>
+								<td>{$teacher.0.cnotes}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<div id="info" data-activeitem="#left-intro" data-activeheader="#header-course"></div>
+	<include file="App/Tpl/Common/footer.html" />
+</body>
+</html>

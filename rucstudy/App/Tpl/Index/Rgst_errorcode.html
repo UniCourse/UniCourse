@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>错误</title>
+		<style>
+			body{background-color:#17A2CF;margin: 0;padding:0;font-family: '微软雅黑','Helvetica','Helvetica neue','Microsoft YaHei','黑体'}
+	    	.container{position: absolute;width:100%;height:100%;text-align: center;}
+	    	#main{position: absolute;top:50%;left:50%;width:280px;height:150px;overflow: visible;margin-left: -140px;margin-top: -150px;color:#FFF;}
+	    	#main a{text-decoration: none;color:#FFF;}
+	    	#main a:hover{color:#78FFB8;}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div id="main">
+				<div style="color:#FFDE0F"><h2>验证码错误或已过期</h2></div>
+				<div><a href="{:U('Index/Rgst/forgetpwpage')}">点此重新发送邮件验证</a></div>
+				<div><a href="{:U('Index/Index/index')}">点此返回登录页</a></div>
+			</div>
+		</div>
+	
+	</body>
+</html>

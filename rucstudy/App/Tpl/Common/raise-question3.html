@@ -1,0 +1,70 @@
+<form id="question-form" class="form">
+	<div class="form-group">
+		<label for="title" class="sr-only">问题标题</label>
+		<input type="text" id="question-title" name="title" placeholder="我要提问" class="form-control">
+		<div class="errormessage" id="qtitle-check"></div>
+	</div>
+	<div id="question-collapse">
+		<div class="form-group">
+			<label for="content" class="sr-only">问题内容</label>
+			<textarea id="question-detail" name="content" placeholder="这里是内容" ></textarea>
+			<div class="errormessage" id="qdetail-check"></div>
+		</div>
+		<div class="form-group">
+			<input type="hidden" name="cno" value="{:I('cno')}" class="form-control">
+			<a class="btn btn-primary" id="btn-question">发布</a>
+			<a class="btn btn-default" id="btn-cancel">取消</a>
+		</div>
+	</div>
+</form>
+<script>
+	$(document).ready(function(){
+		var editor = new UE.ui.Editor();
+		editor.render("question-detail");
+		$(".edui-editor-breadcrumb").hide();//让那个多余的“元素路径”消失
+		$("#btn-question").click(function(){
+		$(".errormessage").text("");	
+		if($("#question-title").val().replace(/[ ]/g,"")==""){$("#question-title").siblings('.errormessage').text("请输入问题的标题");$("#question-title").focus();return false;}
+		if(editor.getContentTxt().replace(/\ /g,"")==""){$("#question-detail").siblings('.errormessage').html("请输入问题的内容");$("#question-detail").focus();return false;}
+		$("#btn-question").text('发布中……');
+		$.ajax({
+			url:"{:U('Teacher/Question/createQuestion')}",
+			type:'POST',
+			dataType:'json',
+			data:$("#question-form").serialize(),
+			success:function(data){
+				if(data.status==1||data.status==2){
+					alert("发布成功");
+					$("#question-title").val("");
+					$("#question-detail").val("");
+					CAR(0.5);}
+				else{alert("貌似发布失败了……");
+				$("#btn-question").text('发布');CA(2);}
+			},
+			error:function(){
+				alert("出错了");
+				$("#btn-question").text('发布');
+				CA(2);
+			}}
+			);
+		return false;
+		});
+		$("#question-title").keypress(function(event) {
+			$(this).siblings('.errormessage').text("");
+		});
+		$("#question-detail").keypress(function(event) {
+			$(this).siblings('.errormessage').text("");
+		});
+		$("#question-collapse").hide();
+		$("#question-title").focus(function(event) {
+			$("#question-collapse").slideDown("fast");
+			$("#question-title").attr('placeholder', '这里输入标题');
+		});
+		$("#btn-cancel").click(function(event) {
+			$("#question-collapse").slideUp("fast");
+			$("#question-title").val("");
+			$("#question-detail").val("");
+			$(".errormessage").text("");
+		});
+	});
+</script>

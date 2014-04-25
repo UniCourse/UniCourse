@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+	<script>
+	$(document).ready(function() {
+		$("#btn-submit").click(function(event) {
+        /* Act on the event */
+        $.post("{:U('Admin/Teacher/modify')}", $("#form-submit").serialize(), function(data) {
+          /*optional stuff to do after success */
+          if(data.status==1)
+          {
+            alert("修改成功");
+            location.reload();
+          }else
+          {
+            alert("修改失败");
+            location.reload();
+          }
+        },'json');
+		});
+
+		$("#btn-pwd").click(function(event) {
+        /* Act on the event */
+        $.post("{:U('Admin/Teacher/modifypwd')}", $("#form-pwd").serialize(), function(data) {
+          /*optional stuff to do after success */
+          if(data.status==1)
+          {
+            alert("修改成功");
+            location.reload();
+          }else
+          {
+            alert("修改失败");
+            location.reload();
+          }
+        },'json');
+      });
+
+
+	});
+	</script>
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Teacher/index')}">老师管理</a> --> 资料管理
+		<br><hr>
+	</div>
+<div>
+	<form id="form-submit">
+		<div>
+			教工号：{$teacher[0]['tno']}
+			<input type="hidden" name="tno" value="{$teacher[0]['tno']}">
+		</div>
+
+		<div>
+			姓名：
+			<input type="text" name="tname" value="{$teacher[0]['tname']}">
+		</div>
+		<div>
+			性别：
+			<input type="text" name="sex" value="{$teacher[0]['sex']}">
+		</div>
+		<div>
+			学院：
+			<input type="text" name="tschool" value="{$teacher[0]['tschool']}">
+		</div>
+		<div>
+			电话：
+			<input type="text" name="phone" value="{$teacher[0]['phone']}">
+		</div>
+		<div>
+			邮箱：
+			<input type="text" name="email" value="{$teacher[0]['email']}">
+		</div>
+		<div>
+			办公室：
+			<input type="text" name="office" value="{$teacher[0]['office']}">
+		</div>
+		<div>
+			个人备注：
+			<textarea name="tnotes" rows="10" cols="30">{$teacher[0]['tnotes']}</textarea>
+		</div>
+		<a class="btn" id="btn-submit">修改</a>
+	</form>
+	<form id="form-pwd">
+		<div>
+			密码：
+			<input type="password" name="password"></div>
+		<div>
+			密码确认：
+			<input type="password" name="passwordConfirm">
+			<input type="hidden" name="tno" value="{$teacher[0]['tno']}">
+			<a class="btn" id="btn-pwd">修改</a>
+		</div>
+	</form>
+
+</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

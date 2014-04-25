@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+		<small class="hide">{$v.qno}{$v.cno}</small>
+		<div>
+			<span class="title">
+				<a href="{:U('Index/Question/questionDetail',array('qno' =>$v['qno'],'cno'=>$v['cno']))}" target="_blank">{$v.qtitle}</a>
+			</span>
+			<small class="pull-right time">{$v.raise_time}</small>
+		</div>
+		<div>
+			<small class="pull-right">
+				<a>{$v.sname}</a>
+				在
+				<a href="{:U('Index/Question/index',array('cno'=>$v['cno']))}">{$v.cname}</a>
+				提出
+			</small>
+		</div>
+		<div  class="ellipsis" style="width:60%">{$v.content}</div>
+		<div class="question-bar">
+			<form class="questionnumber">
+				<input type="hidden" name="qno" value="{$v['qno']}">
+				<if condition="$v['isFocus']==0">
+					<a class="focus btn btn-success btn-xs">关注</a>
+					(
+					<span class="attnum">{$v.attnum}</span>
+					人关注)
+					<else/>
+					<a class="cancelfocus btn btn-xs btn-warning">取消关注</a>
+					(
+					<span class="attnum">{$v.attnum}</span>
+					人关注)
+				</if>
+				<a  href="{:U('Index/Question/questionDetail',array('qno' =>$v['qno'],'cno'=>$v['cno']))}" target="_blank">{$v.rplynum}个回答</a>
+				<if condition="$v['raise_sno']==session('uid')">
+					<!--<a class="btn btn-warning pull-right btn-delete btn-xs">删除</a>-->
+				</if>
+			</form>
+		</div>
+	</div>
+</div>

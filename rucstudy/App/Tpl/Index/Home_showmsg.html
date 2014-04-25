@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>{$cname}历史消息</title>
+	<include file='App/Tpl/Common/head.html' />
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-1 hidden-xs"></div>
+			<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+				<div class="panel panel-info">
+					<div class="panel-heading">历史消息</div>
+						<ul class="list-group">
+							<?php foreach ($message as $key =>
+							$msg): ?>
+
+							<li class="list-group-item">
+								<small class='pull-right time'>{$msg['m_time']}</small>
+								<a href="">{$msg['actor_name']}</a>在<a href="__APP__/question/QuestionDetail/qno/{$msg['position_no']}">{$msg['position_name']}</a>中添加了回复
+							</li>
+							<?php endforeach ?>
+							<?php if ($message[0]==null): ?>
+							<li class="list-group-item">木有历史消息</li>
+							<?php endif ?></ul>
+					<div class="panel-footer">
+						<div class="page">{$page}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+</body>
+</html>

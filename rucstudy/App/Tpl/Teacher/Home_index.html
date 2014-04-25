@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+	<title>我的课程</title>
+	<include file='App/Tpl/Common/head.html' />	
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-12" style="text-align:center">
+				<h1>我的课程</h1>
+			</div>
+		</div>
+		<div class="row">
+			<foreach name='course' item='v1'>
+			<div class="hide">{$v1.cno}</div>
+
+			<div class="thumbnail col-lg-2 col-md-2 col-sm-2 col-xs-2 block1 ellipsis">
+				<a href="{:U('Teacher/Course/index',array('cno' =>$v1['cno']))}">{$v1.cname}</a>
+			</div>
+			
+		</foreach>
+		<?php if ($course[1]==null): ?>
+						<script>
+						$(document).ready(function() {
+							location.href=$(".thumbnail").children('a').attr("href");
+						});
+						</script>
+						<?php endif ?>
+		</div>
+
+
+		<!--
+		<div class="block" id="block-addgroup">
+			<a  href="" id="button-addgroup">再来一门</a>
+		</div>
+
+		<div class="block" id="dialog-createcourse" style="width:21em;height:24em;padding:1em">
+			<div style="text-align:center;color:#000;padding-bottom:1em;">添加课程</div>
+			<form id="form-createcourse">				
+				<div>
+					<label for="cname" style="float:left;width:5em" id="lb-cname">课程名称</label>
+					<input type="text" name="cname" id="cname"></div>
+				<div>
+					<label style="float:left;width:5em">所属学院</label>
+					<select name="cschool" >
+						<option selected value="信息学院">信息学院</option>
+					</select>
+				</div>
+				<div>
+					<label style="float:left;width:5em;">简介</label>
+					<textarea name="intro" rows="3" placeholder="这里输入简介" style="resize:none"></textarea>
+				</div>
+			我想这里还是不要考核方式了
+			<div>
+				<label style="float:left;width:5em">考核方式</label>
+				<textarea name="checkway" rows="3" placeholder="这里输入考核方式" style="resize:none"></textarea>
+			</div>
+			<div>
+				<label style="float:left;width:5em">备    注</label>
+				<textarea name="cnotes" rows="3" placeholder="这里输入备注" style="resize:none"></textarea>
+			</div>
+			<div class="pull-right">
+				<button class="btn btn-primary" id="btn-createcourse" >添加</button>
+				<button class="btn" id="btn-cancel">取消</button>
+			</div>
+
+		</form>
+	</div>-->
+
+</div>
+
+<include file='App/Tpl/Common/footer.html' />
+</body>
+
+<script>
+	$(document).ready(function() {
+
+		$("#btn-createcourse").click(function(event) {
+			if($("#cname").val().replace(/[ ]/g,"")==""){
+				$("#lb-cname").css("color","#F00");
+				$("#cname").focus();
+				return false;
+			}
+			else{
+				$("#lb-cname").css("color","#000");
+			}
+			$.post("{:U('Teacher/Home/createcourse')}", $("#form-createcourse").serialize(), function(data, textStatus, xhr) {
+				if(data.status==1)
+				{
+					alert("添加成功");
+				}else
+				{
+					alert("添加失败");
+				}
+				location.reload();
+			},'json');
+		});
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+		$("#dialog-createcourse").hide();
+		$("#button-addgroup").click(function(event) {
+		$("#block-addgroup").animate({
+			'width': '21em',
+			'height': '24em'},
+			"fast", function() {
+				$("#block-addgroup").hide();
+				$("#dialog-createcourse").show();
+		});
+		return false;
+	});
+		$("#btn-cancel").click(function(event) {
+			$("#dialog-createcourse").hide();
+			$("#block-addgroup").show().animate({
+				"width": "5em",
+				"height": "4em"},
+				"fast", function() {
+				/* stuff to do after animation is complete */
+			});
+		});
+	});
+	
+	
+</script>
+</html>

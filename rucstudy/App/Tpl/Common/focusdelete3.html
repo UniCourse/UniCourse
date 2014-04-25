@@ -1,0 +1,40 @@
+<script type="text/javascript">
+function focus(){
+  $.post("{:U('Index/Question/focus')}", 
+        $("#questionnumber").serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $("#focus").addClass('hide');
+          $("#cancelfocus").removeClass('hide');
+          var a=parseInt($("#focusnum").text());
+          a=a+1;
+          $("#focusnum").text(a);
+        } else {;
+        }
+      }, "json");
+}
+function unfocus(){
+  $.post("{:U('Index/Question/unFocus')}", 
+        $("#questionnumber").serialize(), 
+        function(data) {
+        if (data.status == 1) {
+           $("#cancelfocus").addClass('hide');
+          $("#focus").removeClass('hide');
+          var a=parseInt($("#focusnum").text());
+          a=a-1;                       
+          $("#focusnum").text(a);
+          
+        } else {;
+        }
+      }, "json");
+}
+jQuery(document).ready(function($) {
+   $("#cancelfocus").click(function() {
+      unfocus();      
+    });
+
+    $("#focus").click(function() {
+      focus();
+    });
+});
+</script>

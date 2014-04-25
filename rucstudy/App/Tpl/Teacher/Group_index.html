@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+	<title>{$cname}　小组</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-teacher.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<foreach name='group' item='v'>
+							<div class="block1 thumbnail ellipsis">
+								<a href="{:U('Teacher/Group/groupDetail',array('gno' =>
+									$v['gno'],'cno' => $v['cno']))}" target="_blank">{$v.gname}
+									<br>{$v.gnum} 人</a>
+							</div>
+						</foreach>
+						<?php if ($group[0]==null): ?>
+						<div >还没有小组呢~~</div>
+						<?php endif ?>
+						<div class="page ">{$page}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-group" ></div>
+</body>
+</html>

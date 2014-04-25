@@ -1,0 +1,88 @@
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="__PUBLIC__/images/icon.png" mce_href="__PUBLIC__/images/icon.png" type="image/x-icon"> 
+  <link  id="theme" href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
+  <link  href="__PUBLIC__/css/font-awesome.min.css" rel="stylesheet">
+  <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+  <script src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+  <script src="__PUBLIC__/js/jquery-migrate-1.2.1.js"></script>
+  <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+  <script src="__PUBLIC__/js/jquery.cookie.js"></script>
+  <script src="__PUBLIC__/js/bootbox.js"></script>
+  
+  <script src="__PUBLIC__/js/jquery.form.js"></script>
+  <script src="__PUBLIC__/js/jquery.caretposition.js"></script>
+  <script src="__PUBLIC__/js/jquery.sew.js"></script> 
+  <script src="__PUBLIC__/js/angular.js"></script>
+  <script src="__PUBLIC__/uploadifive/jquery.uploadifive.js"></script>
+
+  <script src="__ROOT__/Data/Ueditor/ueditor.config.js"></script>
+  <script src="__ROOT__/Data/Ueditor/ueditor.all.min.js"></script>
+  <script src="__PUBLIC__/js/unicourse.js"></script>
+  <script >
+    window.PUBLIC_URL='__PUBLIC__';
+    window.ROOT_URL='__ROOT__';
+    window.APP_URL="__APP__";
+    window.UNAME="{$_SESSION['uname']}"+"{$_SESSION['tname']}";
+    window.UID="{$_SESSION['uid']}";
+    window.CNO="{$cno}";
+    window.UEDITOR_HOME_URL = '__ROOT__/Data/Ueditor/';
+    window.UEDITOR_CONFIG.initialFrameHeight = 100;
+  </script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?6c8c3ce0743dd12cf03043954fddd040";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+  <style>
+    /*jquery.sew*/
+    .-sew-list-container {
+      background: white;
+      border: 1px solid #DDD;
+      border-radius: 3px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      min-width: 180px;
+    }
+
+    .-sew-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 100px;
+      overflow: scroll;
+    }
+
+    .-sew-list-item {
+      display: block;
+      padding: 5px 10px;
+      border-bottom: 1px solid #DDD;
+      cursor: pointer;
+    }
+
+
+    .-sew-list-item small {
+      color: #afafaf;
+    }
+
+    .-sew-list-item.selected {
+      color: white;
+      background: #4183C4;
+      text-decoration: none;
+    }
+  .uploadifive-button{
+    height:50px;
+    background-color: #CCF;
+  }
+  .uploadifive-button input{
+    width:100%;
+    cursor: pointer;
+  }
+  </style>
+

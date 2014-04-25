@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+<head>
+	<title>{$cname}　课程管理</title>
+	<include file='App/Tpl/Common/head.html' />
+	<style>
+	.manage-title,.manage-title:visited,.manage-title:link{
+		color:inherit;
+		text-decoration: none;
+		display: inline-block;
+	}
+	.manage-title:hover{
+		color:inherit;
+	}
+	</style>
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-teacher.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<div class="panel panel-danger">
+							<div class="panel-heading">
+								<a class="title manage-title">学生管理</a>
+							</div>
+							<div  id="panel-students">
+								<form id="form-delete" name="deletestudent" action="{:U('Teacher/Management/deleteStudent')}" method="POST" class="inline">
+									<table  class="table">
+										<tr>
+											<td width="4em"></td>
+											<td>姓名</td>
+											<td>学号</td>
+										</tr>
+										<foreach name="student" item="v">
+											<tr>
+												<td>
+													<input type="checkbox" name="{$v['sno']}" class="checklist"></td>
+												<td>{$v.sname}</td>
+												<td>{$v.sno}</td>
+											</tr>
+										</foreach>
+									</table>
+									<div style="text-align:center;">{$page}</div>
+									<div class="list-group-item">
+										<input type="hidden" name="cno" value="{:I('cno')}">
+										<a id="btn-delete" class="btn btn-danger">删除所选学生</a>
+									</div>
+								</form>
+								<div class="panel-footer">
+									<form id="form-add" class="form">
+										<span class="pull-left">输入学号添加学生：</span>
+										<div class="form-group inline">
+											<div class="col-xs-6">
+												<input type="text" name="sno" class="form-control" required/>
+											</div>
+											<input type="hidden" name="cno" value="{:I('cno')}"/>
+											<a id="btn-add" class="btn btn-primary">添加</a>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="panel  panel-warning">
+							<div class="panel-heading">课程介绍</div>
+							<div class="panel-body">
+								<form id="form-intro" class="form">
+									<div class="form-group">
+										<label for="intro">课程简介</label>
+										<textarea name="intro" class="form-control">{$teacher.0.intro}</textarea>
+									</div>
+									<div class="form-group">
+										<label for="intro">考核方式</label>
+										<textarea name="checkway" class="form-control">{$teacher.0.checkway}</textarea>
+									</div>
+									<div class="form-group">
+										<label for="cnotes">备注</label>
+										<textarea name="cnotes" class="form-control">{$teacher.0.cnotes}</textarea>
+									</div>
+										<input type="hidden" name="cno" value="{:I('cno')}">
+									<div class="form-group">
+										<a id="btn-intro" class="btn btn-primary">修改</a>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="row"></div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-intro"></div>
+</body>
+	<script>
+$(document).ready(function(){
+	
+	$("#btn-add").click(function(event) {
+		/* Act on the event */
+		$.post("{:U('Teacher/Management/addStudent')}", $("#form-add").serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{
+				alert('添加成功');
+				CAR(0.5)
+			}
+			else
+			{
+				if(data.status==2)
+				{
+					alert('该学生已在本课程中');
+					CA(1);
+				}else
+				{
+					if(data.status==3)
+					{
+						alert('该学生不存在');
+					}
+					else{
+						alert('添加失败');
+					}
+					CA(2);
+				}
+				
+			}
+			
+		},'json');
+	});
+
+	$("#btn-delete").click(function(event) {
+		/* Act on the event */
+		$.post("{:U('Teacher/Management/deleteStudent')}", $("#form-delete").serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{
+				alert('删除成功');
+				location.reload();
+			}
+			else
+			{
+				alert('删除竟然失败了');
+			}
+			
+		},'json');
+	});
+
+	$("#btn-intro").click(function(event) {
+		/* Act on the event */
+		$.post("{:U('Teacher/Management/updateIntroductionHandle')}", $("#form-intro").serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{
+				alert("修改成功");
+				CA(0.5);
+			}
+			else
+			{
+				alert("修改失败");
+				CA(1);
+			}
+			
+		},'json');
+	});
+
+});
+</script>
+
+</html>

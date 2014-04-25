@@ -1,0 +1,358 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>小组详情</title>
+	<include file='App/Tpl/Common/head.html' />
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+	<script src="__PUBLIC__/js/jquery.pin.js"></script>
+	<style>
+
+	</style>
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<div class="panel panel-default">
+					<div class="list-group">
+						<a class="list-group-item" href="#right-newmsg">
+							新鲜事
+							<span class="glyphicon glyphicon-chevron-right pull-right"></span>
+						</a>
+						<a class="list-group-item" href="#right-doc">
+							文件
+							<span class="glyphicon glyphicon-chevron-right pull-right"></span>
+						</a>
+						<a class="list-group-item" href="#right-mbr">
+							成员
+							<span class="glyphicon glyphicon-chevron-right pull-right"></span>
+						</a>
+					</div>
+				</div>
+				<div class="panel panel-info">
+					<div class="panel-heading">我参与的小组</div>
+					<div class="list-group" id="group-list">
+						<?php foreach ($mygroup as $key =>
+						$value): ?>
+						<a href="{:U('Index/Group/home',array('gno'=>
+							$value['gno']))}" data-gno="{$value['gno']}" class="list-group-item">{$value['gname']}
+						</a>
+						<?php endforeach ?></div>
+				</div>
+
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="hide">{$gno}</div>
+					<div class="row" id="right-newmsg">
+						<div class="panel panel-danger">
+							<div class="panel-heading">新鲜事</div>
+							<div class="panel-body">
+								<input  type="text" id="title-newmsg" placeholder="写新消息" class="form-control">
+								<div id="dialog-newmsg">
+									<form id="form-grpnews" class="form">
+										<div class="form-group">
+											<textarea id="question-detail" name="content" placeholder="这里是内容"></textarea>
+											<input type="hidden" name="gno" value="{:I('gno')}"></div>
+										<div class="form-group">
+											<a class="btn btn-primary" id="btn-grpnews">发布</a>
+											<a class="btn btn-default" id="cancel-new-msg">取消</a>
+										</div>
+									</form>
+								</div>
+							</div>
+							<ul class="list-group">
+								<foreach name="groupnews" item="v">
+									<li class="list-group-item">
+										<span class="hide">{$v.n_no}</span>
+										<div>
+											{$v.sname}：
+											<small class="pull-right time">{$v.n_time}</small>
+										</div>
+										<div>
+											{$v.n_content}
+											<form>
+												<input type="hidden" name="n_no" value="{$v.n_no}">
+												<a class="btn btn-default btn-xs btn-deletenews ">删除</a>
+											</form>
+										</div>
+									</li>
+								</foreach>
+								<?php if ($groupnews[0]==null): ?>
+								<li class="list-group-item">木有新鲜事= =</li>
+								<?php endif ?>
+								<li class="page list-group-item">{$page}</li>
+							</ul>
+						</div>
+					</div>
+					<div class="row" id="right-doc">
+						<div class="panel panel-success" >
+							<div class="panel-heading">文件</div>
+							<ul class="list-group">
+
+								<foreach name='filename' item='v'>
+									<li class="list-group-item">
+										<form action="{:U('Index/Common/groupDownload')}" method="POST" class="inline">
+											<input type="hidden" name="fname" value="{$v['fname']}">
+											<input type="hidden" name="fno" value="{$v['fno']}">
+											<input type="submit" name="submit" value="{$v['fname']}" class="btn btn-link"></form>
+
+										<form class="inline">
+											<input type="hidden" name="gno" value="{$gno}">
+											<input type="hidden" name="fno" value="{$v['fno']}">
+											<a class="btn btn-delete btn-xs">删除</a>
+										</form>
+										<small class="pull-right time">{$v.ftime}</small>
+									</li>
+								</foreach>
+								<?php if ($filename[0]==null): ?>
+								<li class="list-group-item">木有文件= =</li>
+								<?php endif ?></ul>
+							<div class="panel-footer" style="padding:0">
+								<div  id="dialog-addfile">
+									上传文件（最大30MB）：
+									<form id="upload" enctype="multipart/form-data" class="form form-inline">
+										<div class="form-group">
+											<input name="upload[]" type="file" multiple id="upload" data-gno="{$gno}"/>
+											<input name="gno" type="hidden" value="{$gno}" >
+											<a class="btn btn-primary" id="btn-upload">上传</a>
+										</div>
+									</form>
+									<div class="progress progress-striped active hide" id="progressbar" >
+										<div class="progress-bar"  role="progressbar" style="width: 100%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="right-mbr">
+						<div class="panel panel-warning">
+							<div class="panel-heading">成员</div>
+							<div id="group-members" class="panel-body">
+								<div id="group-members-detail">
+									<foreach name="partner" item="v">
+										<span class="member">
+											<a>{$v.sname}</a>
+										</span>
+									</foreach>
+									<a class="btn btn-success" href="#dialog-adduser" data-toggle="collapse">添加成员</a>
+									<hr/>
+									<div id="dialog-adduser" class="collapse out">
+										<form id="userform">
+											<div class="form-group">
+												<foreach name='user' item='v'>
+													<div class="checkbox">
+														<label for="{$v['sno']}">
+															<input type="checkbox" name="{$v['sno']}">{$v['sname']}</label>
+													</div>
+												</foreach>
+											</div>
+											<input type="hidden" name="gno" value="{:I('gno')}">
+											<input type="hidden" name="gname" value="{:I('gname')}">
+											<a id='btn-addmbr' class="btn btn-primary">添加</a>
+										</form>
+										<hr></div>
+									<form id="quit-form">
+										<input type="hidden" name="gno" value="{$gno}">
+										<button type="submit" class="btn btn-warning pull-right" id="btn-quitgrp">退出本组</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeheader="#header-group"></div>
+</body>
+	<script>
+	window.GNO={$gno};
+	$(document).ready(function(){
+		
+    	$.each($("#group-list>a"), function(index, val) {
+		 var $s=$(this);
+		 if($s.attr('data-gno')=='{$gno}')
+		 	{
+		 		setActive($s);
+		 	}
+		});	
+		if(typeof(FileReader)!='undefined'){
+		   	$("#upload").uploadifive({
+		   		auto:true,
+		   		buttonText:'<div class="uploadifive-text">点击上传文件</div>',
+		   		fileSizeLimit:'30MB',
+		   		uploadScript: "{:U('Index/Group/upload')}",
+		   		formData:{gno:window.GNO},
+		   		onUploadComplete:function(file,data){
+		   			console.log(file,data);
+		   		}
+		   	});
+		   	$("#btn-upload").remove();
+		   }
+	});
+	
+	</script>
+	<script>
+	$(document).ready(function() {
+		$("#dialog-newmsg").hide();
+		$("#title-newmsg").focus(
+			function(){
+				$("#title-newmsg").hide();
+				$("#dialog-newmsg").fadeIn('normal');
+			});
+		$("#cancel-new-msg").click(function(){
+			$("#dialog-newmsg").fadeOut('normal');
+			$("#title-newmsg").fadeIn('normal');
+		});
+
+	});
+</script>
+
+	<script>
+
+$(document).ready(function(){
+	var editor=new UE.ui.Editor();
+    	editor.render("question-detail");
+	
+	$("#btn-grpnews").click(function(){
+		 if(editor.getContentTxt().replace(/\ /g,"")==""){alert("请输入内容<br/>（如果只有空格可不行哦<img src='__PUBLIC__/images/kb.gif'>）");CA(1);$("#question-detail").focus();return false;}
+		 $("#btn-grpnews").text("发布中……");
+
+			$.post(
+				"{:U('Index/Group/addGroupNews')}",
+				$("#form-grpnews").serialize(),
+				function(data){
+					if(data.status==1)
+					{
+						alert("发表成功");
+						CAR(1);
+					}
+					else
+					{
+						alert("发表失败");
+						$("#btn-grpnews").text("发布");
+						CA(1);
+					}
+				},
+				'json'
+			);
+		});
+
+	$(".btn-deletenews").click(function(){
+		$s=$(this);
+			$.post(
+				"{:U('Index/Group/deleteGroupNews')}",
+				$(this).closest('form').serialize(),
+				function(data){
+					if(data.status==1)
+					{
+						$s.closest('li').fadeOut("normal");
+					}
+					else
+					{
+						alert("删除失败");
+						CA(1);
+					}
+				},
+				'json'
+			);
+		});
+		$("#btn-quitgrp").click(function(){
+		$.post("{:U('Index/Group/quit')}",$("#quit-form").serialize(),function(data){
+			if(data.status==1){
+				alert("退出成功");
+				location.replace("{:U('Index/Group/index')}");
+			}
+			else{
+				alert("退出失败");
+				CA(1);
+			}
+		},'json');
+		return false;
+	});
+
+	$("#btn-addmbr").click(function(){
+		var s=$("#userform").serialize();
+			$.post(
+				"{:U('Index/Group/addUserHandle')}",
+				$("#userform").serialize(),
+				function(data){
+					if(data.status==1)
+					{
+						alert("添加成功");
+						location.reload();
+					}
+					else
+					{
+						alert("添加失败");
+						CA(1);
+					}
+				},
+				'json'
+			);
+		});
+
+	$("#btn-upload").click(function(){
+		$("#upload").ajaxSubmit(
+		{
+			url:"{:U('Index/Group/upload')}",
+			type:"post",
+			datatype:"script",
+			success:function(data){
+				if(data.status==1)
+				{
+					alert("上传成功");
+					CAR(0.5);
+				}
+				else
+				{
+					$("#progressbar").addClass("hide");
+					alert("上传失败 错误编号："+data.status);
+					CA(1);
+				}
+				$("#progressbar").addClass("hide");
+			},
+			beforeSubmit:function(){
+				$("#progressbar").removeClass("hide");
+			}
+		});
+	});
+
+	$(".btn-delete").click(function(){
+		$s=$(this);
+		$(this).closest('form').ajaxSubmit({
+			url:"{:U('Index/Group/deleteGroupFile')}",
+			type:"POST",
+			datatype:"json",
+			success:function(data){
+				if(data.status==1)
+				{
+					$s.closest('li').fadeOut("fast");
+				}
+				else
+				{
+					if(data.status==2)
+					{
+						alert("删除失败。原因：您不在该小组内");
+						CA(1);
+					}
+					else{
+						alert("删除失败");
+						CA(1);
+					}
+				}
+			}
+		});
+	});
+
+
+});
+</script>
+
+</html>

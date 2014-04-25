@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+  	<include file='App/Tpl/Common/Admin/header.html' />
+  	<script>
+		$(document).ready(function() {
+			$(".btn-delete").click(function(event) {
+				/* Act on the event */
+				$.post("{:U('Admin/Student/deleteSchedule')}", $(this).parent().serialize(), function(data) {
+					/*optional stuff to do after success */
+					if(data.status==1)
+					{
+						alert("删除成功");
+					}else
+					{
+						alert("删除失败");
+					}
+					location.reload();
+				},'json');
+			});
+		});
+	</script>
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Student/index')}">学生管理</a> --> 日程管理
+		<br><hr>
+	</div>
+<div id="container"  class="container-fluid">
+	<div class="span8" id="main-middle">
+
+		<foreach name='schedule' item='v'>
+			<div class="hero-unit">
+
+				<span class="hide">日程编号{$v.sdno}学生编号{$v.sno}</span>
+
+				<div>
+					提醒名称{$v.rname}
+					<small class="pull-right">截止日期{$v.rdeadline}</small>
+				</div>
+				<div>备注{$v.rnotes}</div>
+				<form class="form-delete">
+					<input type="hidden" name="sdno" value="{$v['sdno']}">
+					<a class="btn btn-warning pull-right btn-delete">删除</a>
+				</form>
+			</div>
+		</foreach>
+		{$page}
+	</div>
+</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

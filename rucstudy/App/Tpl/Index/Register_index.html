@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+  <title>用户注册</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
+
+  <script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
+  <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+  <script src="__PUBLIC__/js/bootbox.js"></script>
+  <style>
+  
+  body{
+    background-color: rgb(0,139,139);
+    color:rgb(255,255,255);
+  }
+  .a{
+    color:rgb(255,255,155);
+  }
+  .a:hover{
+    color:rgb(255,255,0);
+  }
+  .a:visited{
+    color:rgb(255,255,0);
+  }
+  .bootbox{
+    color:rgb(0,0,0);
+  }
+
+
+  #register-box{
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    z-index: 2;
+    padding:1em 1em 1em 1em;
+  }
+  #section-title{
+    text-align: center;
+    font-size: 40px;
+    padding: 25px;
+  }
+  #buttongroup1{
+    text-align: center;
+  }
+  #buttongroup1>.btn{
+    margin: 5px;
+  }
+  #footer{
+    width: 100%;
+    padding-bottom:20px;
+    text-align: center;
+    z-index:0;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div id="section-title" class="row hidden-xs">
+      用户注册
+    </div>
+    <div id="section-register" class="row">
+      <div id="register-container" class="col-xs-12">
+        <div  id="register-box" >
+          <form id="form-register" class="form form-horizontal">
+            <div class="form-group">
+              <label for="sno" class="control-label col-sm-3 col-xs-3">学号</label>
+              <div class="col-sm-9 col-xs-9">
+                <input type="text" name="sno" id="sno" class="form-control" required></div>
+            </div>
+            <div class="form-group">
+              <label for="sname"  class="control-label col-sm-3 col-xs-3">姓名</label>
+              <div class="col-sm-9 col-xs-9">
+                <input type="text" name="sname" id="sname" class="form-control" required></div>
+            </div>
+            <div class="form-group">
+              <label for="sex"  class="control-label col-sm-3 col-xs-3">性别</label>
+              <div class="col-sm-9 col-xs-9">
+                <input type="radio" name="sex" value="男">
+                男
+                <input type="radio" name="sex" value="女">女</div>
+            </div>
+            <div class="form-group">
+              <label for="grade"  class="control-label col-sm-3 col-xs-3">年级</label>
+              <div class="col-sm-9 col-xs-9">
+                <select name="grade" class="form-control">
+                  <option value="请选择年级" selected="selected">请选择年级</option>
+                  <option value="2010">2010级</option>
+                  <option value="2011">2011级</option>
+                  <option value="2012">2012级</option>
+                  <option value="2013">2013级</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="dept"  class="control-label col-sm-3 col-xs-3">学院</label>
+              <div class="col-sm-9 col-xs-9">
+                <select name="dept" class="form-control">
+                  <option value="" selected="selected">请选择学院</option>
+                  <option value="信息学院">信息学院</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="major"  class="control-label col-sm-3 col-xs-3">专业</label>
+              <div class="col-sm-9 col-xs-9">
+                <select name="major" class="form-control">
+                  <option value="请选择专业" selected="selected">请选择专业</option>
+                  <option value="数学">数学</option>
+                  <option value="信息系统与信息管理">信息系统与信息管理</option>
+                  <option value="计算机科学与技术">计算机科学与技术</option>
+                  <option value="信息安全">信息安全</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="passwordFirst"  class="control-label col-sm-3 col-xs-3">密码</label>
+              <div class="col-sm-9 col-xs-9">
+                <input type="password" name="passwordFirst" id="passwordFirst" class="form-control" required></div>
+            </div>
+            <div class="form-group" >
+              <label for="passwordConfirm" class="control-label col-sm-3 col-xs-3">确认密码</label>
+              <div class="col-sm-9 col-xs-9">
+                <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-control" required></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-xs-12">
+                <div class="pull-right">
+                （点击注册后需通过
+                <a href="http://ruc.edu.cn" target="_blank" class="a">人大邮箱</a>
+                进行验证）
+              </div>
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <div class="col-xs-12" id="buttongroup1">
+                <a id="btn-register" class="btn btn-warning">注册</a>
+                <a class="btn btn-default" href="{:U('Index/index')}">返回</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div >Copyright&nbsp;@&nbsp;UniCourse2013, All Rights Reserved.</div>
+          <div>联系我们：unicourse@163.com</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+$(document).ready(function(){
+  $("#btn-register").click(function(){
+  if($("#sno").val()=="")
+    {
+    bootbox.alert("请填写学号！");
+      return false;
+    }
+  if($("#sname").val()=="")
+    {
+    bootbox.alert("请填写姓名！");
+      return false;
+    }
+  if($("#passwordFirst").val()=="")
+    {
+    bootbox.alert("请填写密码！");
+      return false;
+    }
+  if($("#passwordConfirm").val()=="")
+    {
+    bootbox.alert("请填写密码确认！");
+      return false;
+    }
+    if($("#passwordFirst").val()!=$("#passwordConfirm").val())
+    {
+      bootbox.alert("两次输入密码不一致，请重新输入！");
+      return false;
+    }
+    bootbox.alert("正在处理……请稍候……");
+    $.post("{:U('Index/Register/regverify')}",
+      $("#form-register").serialize(),
+      function(data){
+        $(".bootbox").modal("hide");
+        if(data.status==1)
+        {
+          bootbox.alert("距离注册成功还差最后一步：请登录您的人大邮箱进行验证！<br><a href=\"http://ruc.edu.cn\" target=\"_blank\">http://ruc.edu.cn</a><br>");
+          //location.reload();
+        }
+        else
+        {
+          bootbox.alert("注册失败。如有疑问，请联系管理员UniCourse@163.com！");
+          //location.reload();
+        }
+      },
+      "json"
+      );
+  });
+
+});
+</script>
+
+
+</body>
+</html>

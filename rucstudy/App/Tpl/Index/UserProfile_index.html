@@ -1,0 +1,233 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+  <title>我的资料</title>
+  <include file='App/Tpl/Common/head.html' />
+  <style>
+  tr td:first-child{
+    text-align: right;
+    padding-right: 0.5em;
+  }
+  </style>
+</head>
+<body>
+  <include file='App/Tpl/Common/header.html' />
+  <div id="main-container" class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-1 hidden-xs"></div>
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+        <div class="panel panel-primary">
+          <div class="panel-heading">我的资料</div>
+          <table class="table" >
+            <tr>
+              <td class="span2">学号</td>
+              <td>{$student.0.sno}</td>
+            </tr>
+            <tr>
+              <td>姓名</td>
+              <td>{$student.0.sname}</td>
+            </tr>
+            <tr>
+              <td>性别</td>
+              <td>{$student.0.sex}</td>
+            </tr>
+            <tr>
+              <td>年级</td>
+              <td>{$student.0.sgrade}级</td>
+            </tr>
+            <tr>
+              <td>学院</td>
+              <!-- 学院传值表单 -->
+              <form id="form-dept" class="form">
+                <td>
+                  <span class="hide" id="curschool">{$student[0]['school']}</span>
+                  <!-- <input type="text" name="dept" value="{$student[0]['school']}">
+                  -->
+                 
+                </td>
+              </form>
+              <td>
+                <a id="btn-dept" class="btn btn-info">保存</a>
+              </td>
+            </tr>
+           <!-- <tr>
+              <td>专业</td>
+              <form id="form-major">
+                <td>
+                  <select name="major" id="major" class="form-control">
+                    <option value="" selected>请选择</option>
+                    <option value="数学">数学</option>
+                    <option value="信息系统与信息管理">信息系统与信息管理</option>
+                    <option value="计算机科学与技术">计算机科学与技术</option>
+                    <option value="信息安全">信息安全</option>
+                  </select>
+				  <span class="" id="curmajor">当前专业：{$student[0]['smajor']}</span>
+                </td>
+              </form>
+              <td>
+                <a id="btn-major" class="btn btn-info">保存</a>
+              </td>
+            </tr>
+          -->
+            <tr>
+              <td>个性签名</td>
+              <!-- 个性签名传值表单 -->
+              <form id="form-notes">
+                <td>
+                  <textarea name="notes" rows="3" class="form-control" >{$student.0.snotes}</textarea>
+                </td>
+              </form>
+              <td>
+                <a id="btn-notes" class="btn btn-info">保存</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a  id="btn-changepw" href="">修改密码</a>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <form id="form-pwd">
+              <tr class="warning tr-pwd">
+                <td>原密码</td>
+                <td>
+                  <input type="password" name="ipassword" id="ipassword" class="form-control" required></td>
+                <td></td>
+              </tr>
+              <tr class="warning tr-pwd">
+                <td>新密码</td>
+                <td>
+                  <input type="password" name="password" id="password" class="form-control" required></td>
+                <td></td>
+              </tr>
+              <tr class="warning tr-pwd">
+                <td>确认密码</td>
+                <td>
+                  <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-control" required></td>
+                <td>
+                  <button id="btn-pwd" class="btn btn-info">保存</button>
+                </td>
+              </tr>
+            </form>
+          </table>
+        </div>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+        <include file="App/Tpl/Common/corner.html" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+/**
+*匹配专业
+*/
+/*
+  $(document).ready(function() {
+    var curm=$("#curmajor").text();
+  $.each($("#major option"), function(index, val) {
+       if($(this).attr("value")==curm){
+        $(this).attr('selected', 'selected');
+       }
+    });  
+  });
+*/
+</script>
+
+  <script type="text/javascript">
+
+/*$(document).ready(function(){
+  
+
+    $("#btn-major").click(function(){
+    $.post("{:U('Index/UserProfile/handleMajor')}",
+      $("#form-major").serialize(),
+      function(data){
+        if(data.status==1)
+        {
+          alert("专业 修改成功");
+          CA(1);
+        }
+        else
+        {
+          alert("操作失败");
+         CA(1);
+        }
+      },
+      "json"
+      );
+  });
+  */
+ $(document).ready(function(){
+    $("#btn-notes").click(function(){
+    $.post("{:U('Index/UserProfile/handleNotes')}",
+      $("#form-notes").serialize(),
+      function(data){
+        if(data.status==1)
+        {
+          alert("修改成功");
+        }
+        CA(0.5);
+      },
+      "json"
+      );
+  });
+    $("#btn-dept").click(function(){
+    $.post("{:U('Index/UserProfile/handleDept')}",
+      $("#form-dept").serialize(),
+      function(data){
+        if(data.status==1){
+          alert("学院修改成功");
+          CA(0.5);
+        }
+      },
+      "json"
+      );
+    return false;
+  });
+
+    $("#form-pwd").submit(function(){
+      var pwi=$("#ipassword").val();
+      var pw1=$("#password").val();
+      var pw2=$("#passwordConfirm").val();
+      if(pwi==""){$("#ipassword").focus();return false;}
+      if(pw1==""){$("#password").focus();return false;}
+      if(pw2==""){$("#passwordConfirm").focus();return false;}
+      if(pw1!=pw2){
+        alert("两次密码不一致哟~");CA(1);$("#passwordConfirm").focus();return false;
+      }
+
+    $.post("{:U('Index/UserProfile/handlePassword')}",
+      $("#form-pwd").serialize(),
+      function(data){
+        if(data.status==1)
+        {
+          alert("密码 修改成功");
+           $(".tr-pwd").hide();
+          CA(1);
+        }
+        else
+        {
+          if(data.status==2)
+          {
+            alert("原密码 输入错误");
+          }else{
+            alert("密码 修改失败 原因："+data.status);
+          }
+          CA(1);
+        }
+      },
+      "json"
+      );
+  });
+    $(".tr-pwd").hide();
+    $("#btn-changepw").click(function(event) {
+      $(".tr-pwd").toggle();
+      return false;
+    });
+});
+</script>
+  <include file="App/Tpl/Common/footer.html" />
+</body>
+</html>

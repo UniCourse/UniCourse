@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+    <title>日程</title>
+    <include file='App/Tpl/Common/head.html' />
+    <script src="__PUBLIC__/js/jquery-ui.custom.min.js"></script>
+    <link href="__PUBLIC__/css/datetimepicker.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap-datetimepicker.js"></script>
+</head>
+<body>
+    <include file='App/Tpl/Common/header.html' />
+    <div id="main-container" class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">添加日程提醒</div>
+                    <div class="panel-body">
+                        <form id="form-schedule" class="form">
+                            <div class="form-group">
+                                <label for="rnmae">名称：</label>
+                                <input type="text" name="rname"  id="schname" class="form-control">
+                                <div class="errormessage" id="schname-check"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rnotes">备注：</label>
+                                <textarea name="rnotes" class="form-control" style="resize:none"></textarea>
+                                <div class="errormessage" id="note-check"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rdeadline">日期：</label>
+                                <div class="input-append date form_datetime input-group " id="datetimepicker1"  data-date-format="yyyy-MM-dd hh:mm:ss" >
+                                    <input type="text" class="form-control" name="rdeadline" id="schtime" readonly>
+                                    <span class="input-group-addon add-on"> <i class="icon-calendar"></i>
+                                    </span>
+                                </div>
+                                <div class="errormessage" id="date-check"></div>
+                            </div>
+                            <div class="form-group">
+                                <a id="btn-schedule" class="btn btn-primary">添加</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+                <div id="main-right">
+                    <div class="panel panel-default">
+                        <ul class="list-group">
+                            <foreach name='schedule' item='v'>
+                                <li class="list-group-item">
+                                    <div>
+                                        <span class="hide">{$v.sdno}{$v.sno}</span>
+                                        <span class="title">{$v.rname}</span>
+                                        <span class="time pull-right">{$v.rdeadline}</span>
+                                        <div style="margin:0.5em 0.5em 0 0.5em">{$v.rnotes}</div>
+                                        <form  class="form-delete　form">
+                                            <div class="form-group">
+                                                <input type="hidden" name="sdno" value="{$v['sdno']}">
+                                                <a class="btn btn-link btn-xs btn-delete">删除</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </li>
+                            </foreach>
+                            <?php if ($schedule[0]==null): ?>
+                            <li class="list-group-item">没有日程提醒</li>
+                            <?php endif ?></ul>
+                    </div>
+                    <div class="page">{$page}</div>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+                <include file="App/Tpl/Common/corner.html" />
+            </div>
+        </div>
+    </div>
+    <include file="App/Tpl/Common/footer.html" />
+    <div id="info" data-activeheader="#header-schedule"></div>
+</body>
+    <script>
+  $(document).ready(function() {
+
+    $('#datetimepicker1').datetimepicker({
+        language:  'cn',
+        format: 'yyyy-mm-dd hh:ii',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+
+    $("#btn-schedule").click(function(event) {
+        $(".errormessage").text("");
+        if($("#schname").val().replace(/\ /g,"")==""){$("#schname-check").text("请输入日程标题");$("#schname").focus();return false;}
+        if($("#schtime").val().replace(/\ /g,"")==""){$("#date-check").text("请选择时间");$("#schtime").focus();return false;}
+  
+        $.post("{:U('Index/Schedule/addScheduleHandle')}", $("#form-schedule").serialize(), function(data, textStatus, xhr) {
+            /*optional stuff to do after success */
+            if(data.status==1)
+            {
+                alert("添加成功");
+                CAR(0.5);
+            }else
+            {
+                alert("添加失败");
+                CA(1);
+            }
+        });
+    });
+
+    $(".btn-delete").click(function(event) {
+        var $s=$(this);
+        /* Act on the event */
+        $.post("{:U('Index/Schedule/deleteSchedule')}", $(this).closest('form').serialize(), function(data, textStatus, xhr) {
+            /*optional stuff to do after success */
+            if(data.status==1)
+            {
+                $s.closest('li').fadeOut('fast');
+            }else
+            {
+                alert("删除失败");
+                CA(1);
+            }
+        });
+    });
+  });
+</script>
+</html>

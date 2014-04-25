@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> <a href="{:U('Admin/Course/homework',array('cno'=>I('cno')))}">作业管理</a> --> 作业详细
+		<br><hr>
+	</div>
+	<div id="container">
+
+		<div>
+			课程号：{$cno}
+			<br/>	
+			课程名称：{$cname}
+		</div>
+		<div>
+
+			<div class="main-list">
+				<div>
+
+					<h3>{$homework.0.htitle}</h3>
+					<small class="pull-right">{$homework.0.htime}</small>
+					<h5>{$homework.0.hcontent}</h5>
+					<br/>	
+					截止时间：{$homework.0.deadline}
+					<br/>	
+					<div>
+						附件：
+						<table class="table table-bordered">
+
+							<foreach name="homeworkfile" item="v">
+
+								<tr>
+
+									<td>
+										<form action="{:U('Admin/Course/download')}" method="POST">
+											{$v.fname}
+											<input type="hidden" name="fname" value="{$v['fname']}">	
+											<input type="hidden" name="furl" value="{$v['furl']}">	
+											<input type="hidden" name="cno" value="{:I('cno')}">	
+											<input type="submit" name="submit" value="下载">	
+											<small class="pull-right">{$v.ftime}</small>
+										</form>
+										<form class="form-delete">
+											<input type="hidden" name="fno" value="{$v['fno']}">	
+											<input type="hidden" name="cno" value="{:I('cno')}">	
+											<a class="btn btn-mini pull-right btn-delete">删除</a>
+										</form>
+									</td>
+
+								</tr>
+
+							</foreach>
+
+						</table>
+					</div>
+					<div>
+						提交情况：
+						<br/>	
+						<table class="table table-bordered">
+							<tr>
+								<td>文件</td>
+								<td>提交人</td>
+								<td>提交人学号</td>
+								<td>提交时间</td>
+							</tr>
+							<foreach name="homeworkdetail" item="v">
+								<tr>
+									<td>
+										<a href="{__ROOT__/{$v['furl']}}">{$v.fname}</a>
+									</td>
+									<td>{$v.sname}</td>
+									<td>{$v.sno}</td>
+									<td>{$v.ftime}</td>
+								</tr>
+							</foreach>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+<script>
+$(document).ready(function(){
+	$(".btn-delete").click(function(event) {
+		/* Act on the event */
+		$.post("{:U('Admin/Course/deleteHomeworkFile')}", $(this).parent().serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{
+				alert('删除成功');
+			}
+			else
+			{
+				alert('删除失败');
+			}
+			location.reload();
+		},'json');
+	});
+
+});
+</script>
+</html>

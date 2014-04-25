@@ -1,0 +1,49 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>{$cname}　课件</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-course.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="panel panel-default">
+						<div class="panel-heading" style="background-color:#9b59b6;color:#FFF">课件列表</div>
+						<table class="table table-striped">
+							<foreach name='filename' item='v'>
+								<tr>
+									<td>
+										<form action="{:U('Index/Common/documentDownload')}" method="POST" class="inline">
+											<input type="hidden" name="fname" value="{$v['fname']}">
+											<input type="hidden" name="fno" value="{$v['fno']}">
+											<input type="submit" name="submit" value="{$v['fname']}" class="btn btn-link "></form>
+
+										<small class="pull-right">{$v.ftime}</small>
+									</td>
+								</tr>
+							</foreach>							
+						</table>
+						<div class="panel-footer">
+							<div class="page">{$page}</div>
+						</div>
+						<?php if ($filename[0]==null): ?>						
+						<div class="panel-body">老师好像什么都木有传耶~</div>
+						<?php endif ?>						
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<div id="info" data-activeitem="#left-document" data-activeheader="#header-course"></div>
+	<include file="App/Tpl/Common/footer.html" />
+</body>
+</html>

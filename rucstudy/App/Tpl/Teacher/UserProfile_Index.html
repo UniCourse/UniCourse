@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+	<title>我的资料</title>
+	<include file='App/Tpl/Common/head.html' />
+	<style>
+  tr td:first-child{
+    text-align: right;
+    padding-right: 0.5em;
+  }
+  </style>
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-1 hidden-xs"></div>
+			<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+				<div class="panel panel-primary">
+					<div class="panel-heading">我的资料</div>
+					<table class="table" >
+						<tr >
+							<td>编号</td>
+							<td>{$teacher.0.tno}</td>
+						</tr>
+						<tr>
+							<td>姓名</td>
+							<td>{$teacher.0.tname}</td>
+						</tr>
+						<tr>
+							<td>性别</td>
+							<td>{$teacher.0.sex}</td>
+						</tr>
+						<tr>
+							<td>年级</td>
+							<td>{$student.0.sgrade}级</td>
+						</tr>
+						<tr>
+							<td>学院</td>
+							<td>{$teacher.0.tschool}</td>
+						</tr>
+						<tr>
+							<td>联系电话</td>
+							<td>
+								<form action="{:U('Teacher/UserProfile/handlePhone')}" method="post">
+									<input type="text" name="phone" value="{$teacher.0.phone}" class="form-control"></td>
+								<td>
+									<input type="submit" name="submit" value="保存"  class="btn  btn-default"></form>
+							</td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td>
+								<!-- Email传值表单 -->
+								<form action="{:U('Teacher/UserProfile/handleEmail')}" method="post">
+									<input type="text" name="email" value="{$teacher.0.email}"  class="form-control"></td>
+								<td>
+									<input type="submit" name="submit" value="保存"  class="btn  btn-default"></form>
+							</td>
+						</tr>
+						<tr>
+							<td>办公室</td>
+							<td>
+								<!-- 办公室传值表单 -->
+								<form action="{:U('Teacher/UserProfile/handleOffice')}" method="post">
+									<input type="text" name="office" value="{$teacher.0.office}"  class="form-control"></td>
+								<td>
+									<input type="submit" name="submit" value="保存"  class="btn  btn-default"></form>
+							</td>
+						</tr>
+						<tr>
+							<td>备注</td>
+							<!-- 个性签名传值表单 -->
+							<form action="{:U('Teacher/UserProfile/handleNotes')}" method="post">
+								<td>
+									<textarea name="tnotes"  class="form-control">{$teacher.0.tnotes}</textarea>
+								</td>
+								<td>
+									<input type="submit" name="submit" value="保存"  class="btn  btn-default"></form>
+							</td>
+						</tr>
+						<form action="{:U('Teacher/UserProfile/handlePassword')}" method="post" id="form-password">
+							<tr>
+								<td>修改密码</td>
+								<td>
+									<input type="password" name="password"  class="form-control"></td>
+							</tr>
+							<tr>
+								<td>确认密码</td>
+								<td>
+									<input type="password" name="passwordConfirm"  class="form-control"></td>
+								<td>
+									<input type="submit" name="submit" value="修改" class="btn  btn-default"></td>
+							</tr>
+						</form>
+					</table>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<script>
+	$(document).ready(function(){
+		$("form").not("#form-password").submit(function(e){
+			var $t=$(this);
+			$.post($t.attr('action'),$t.serialize(),function(data){
+				if(data.status==0){
+					alert(data.info);
+				}
+				else if(data.info){
+					alert(data.info);
+				}
+				else alert("出错了");
+			});
+			return false;
+		});
+		$("#form-password").submit(function(event) {
+			var $pws=$("input[type='password']");
+			if($pws.eq(0).val()==""||$pws.eq(1).val()=="") return false;
+			if($pws.eq(0).val()==$pws.eq(1).val()){
+				$.post($("#form-password").attr('action'),$("#form-password").serialize(),function(data){
+				if(data.status==0) alert(data.info);
+				else if(data.info) alert(data.info);
+				else alert("出错了");
+				});
+			}
+			else alert("两次密码不一致");
+			return false;
+		});
+	});
+	</script>
+</body>
+</html>

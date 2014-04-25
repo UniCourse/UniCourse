@@ -1,0 +1,27 @@
+	<div id="sidebar1" class="panel panel-info">
+		<div class="panel-heading"><div class="list-icon"><span class="icon-home"></span></div>{$cname}</div>
+		<div class="list-group"  role="menu">
+			<a id="left-announcement" class="list-group-item" href="{:U('Index/Notice/index',array('cno' =>$_REQUEST['cno']))}" ><div class="list-icon"><span class="icon-reorder"></span></div>公告</a>
+			<a id="left-question" class="list-group-item" href="{:U('Index/Question/index',array('cno' =>$_REQUEST['cno']))}" ><div class="list-icon"><span class="icon-comments"></span></div>问答</a>
+			<a id="left-group" class="list-group-item" href="{:U('Index/Group/index',array('cno' =>$_REQUEST['cno']))}"><div class="list-icon"><span class="icon-group"></span></div>小组</a>
+			<a id="left-homework" class="list-group-item" href="{:U('Index/Homework/index',array('cno' =>$_REQUEST['cno']))}"><div class="list-icon"><span class="icon-edit"></span></div>作业</a>
+			<a id="left-document" class="list-group-item" href="{:U('Index/Document/index',array('cno' =>$_REQUEST['cno']))}"><div class="list-icon"><span class="icon-file-text"></span></div>课件</a>
+			<a id="left-intro" class="list-group-item" href="{:U('Index/Introduction/index',array('cno' =>$_REQUEST['cno']))}"><div class="list-icon"><span class="icon-info"></span></div>课程介绍</a>
+		</div>
+	</div>
+	<div id="sidebar2">
+		<div class="panel panel-success">
+			<div class="panel-heading">课程切换</div>
+			<div class="list-group">
+				<?php 
+					foreach (session('selectedCourses') as $key =>	
+				$value) {
+				?>
+				<a id="left-{$value['cname']}" class="list-group-item left-changecourse" href="__URL__/index/cno/{$value['cno']}" >{$value['cname']}</a>
+				<?php 
+					}
+				?>	
+				<a href="{:U('Index/Course/index')}" class="list-group-item panel-footer">所有课程</a>
+			</div>
+		</div>
+	</div>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>课程广场</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-12" style="text-align:center">
+				<h1>我担任的助教</h1>
+			</div>
+		</div>
+		<div class="row">
+			<foreach name='course' item='v1'>
+				<div class="hide">{$v1.cno}</div>
+				<div class="thumbnail col-lg-2 col-md-2 col-sm-2 col-xs-2 block1 ellipsis">
+					<a href="{:U('Index/Assistant/enter',array('cno' =>$v1['cno']))}">{$v1.cname}</a>
+				</div>
+			</foreach>
+			<?php if (!$course[0]) {
+				# code...
+			?>
+				<div class="thumbnail col-lg-2 col-md-2 col-sm-2 col-xs-2 block1 ellipsis">
+					无助教课程
+				</div>
+			<?php } ?>
+		</div>
+	</div>
+</body>
+</html>

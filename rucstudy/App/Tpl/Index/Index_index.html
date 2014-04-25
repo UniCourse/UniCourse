@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Unicourse登录</title>
+    <script src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+    <script src="__PUBLIC__/js/jquery.cookie.js"></script>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?6c8c3ce0743dd12cf03043954fddd040";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    <style>
+    body{margin:0px;padding:0px;font-family:'微软雅黑','Helvetica','Helvetica neue','Microsoft YaHei','黑体'}
+    .container{width:960px;margin:0px auto;}
+    section{width:100%;}
+    #nav{background-color:rgb(35,45,59);height:60px;width:100%;}
+    #header-logo{width:180px;height:24px;padding:18px 0px;}
+    #header-list{display:inline-block;float:right;margin-top:0px}
+    #header-list>li{display:inline-block;font-weight:12px;height:60px;line-height:60px;padding:0 35px;position: relative;list-style: none;}
+    #header-list>li:hover{background-color: #FAFAFA;color:rgb(35,45,59);}
+    #header-list>li>a{color:rgb(127,131,136);text-decoration:none;display:block;width:100%;height:100%;cursor:pointer;}
+    #header-list>li:hover a{color:rgb(35,45,59);}
+    #header-list>li .sublist{position:absolute;display: none;right:0px;}
+    #header-list>li .sublist li{background-color: #FAFAFA;list-style: none;list-style-position:outside;line-height: 20px;font-size:13px;float:left;box-shadow:2px 2px 1px rgba(0, 0, 0, 0.3);}
+    #header-list>li .sublist li>a{width:100%;height:100%;color:rgb(35,45,59);text-decoration: none;width:200px;height:20px;padding:10px;display: block;}
+    #header-list>li .sublist li>a>*{float:left;}
+    #header-list>li .sublist li:hover{background-color: #6FD3C5}
+    #header-list>li .sublist li>a>img{height:20px;margin-right: 5px}    
+    #header-list>li:hover .sublist{display: block;}
+    #header-list>li:hover #aboutbox{display: block;}
+    #aboutbox{position: absolute;display: none;width:920px;padding:20px;right:-138px;float:right;background-color:#FAFAFA;box-shadow:2px 2px 1px rgba(0, 0, 0, 0.3);line-height: 35px;}
+    #section-one{height:640px;background-color:rgb(84,196,234);text-align:center;}
+    #section-one:before,#section-one:after{content:"";display: block;width:100%;height:25px;background-color:rgb(23,162,207);}
+    #section-one:after{margin-top: -25px;}
+    #loginarea{width:640px;padding:60px 180px;text-align:center;}
+    #loginarea form{text-align:center;}
+    .inputbox{position: relative;width:290px;height:40px;margin:20px 10px;display: inline-block;}
+    .inputbox input{width:240px;height:30px;padding:5px 5px 5px 45px;border:none;border-radius:1px;box-shadow:0px 2px 1px rgba(0,0,0,0.3);}
+    .inputbox .inputaddon{position: absolute;left:14px;top:9px;}
+    #loginarea button{display:block;width:200px;height:40px;line-height:40px;background-color:rgb(35,45,59);color:#fff;border:none;margin:10px auto 0px auto;box-shadow:0px 2px 1px rgba(51,153,153,1);cursor:pointer;}
+    #loginarea button:hover{background-color: rgb(45,55,69)}
+    #login-logo{margin:40px auto 0px;}
+    #login-logo img{width:180px;height:24px;}
+    #login-title{font-size:40px;color:#ffffff;}
+    #login-logo{display: none;}
+    #login-pic img{/*width:466px;*/
+     height:200px;margin-top:45px;margin-bottom: 25px}
+    #login-title2{color:#FFF;text-align: center;font-size: 24px;margin-bottom: 40px;display: none}
+    #icon-login{position:relative;top:5px;margin-right:5px;}
+    #login-inputgroup{position:relative;}
+    #login-infos{margin-top:35px;color:#FFF;}
+    #login-infos a{color:#FFF;text-decoration:none;}
+    #login-infos a:hover{color:#FFFFFF;text-shadow:1px 1px 2px #3e3e00;}
+    #section-two{height:500px;background-color:rgb(245,245,245);margin-top: 25px}
+    #section-two .feature{position:relative;margin:100px 27px 0px;width:180px;height:440px;display:inline-block;color:#5e5e5e;}
+    #section-two .feature .title{font-size:36px;height:40px;line-height:40px;text-align:center;padding:50px 0px;}
+    #section-two .feature .box{width:180px;height:180px;position:relative;border-radius:5px;z-index:2}
+    #section-two .feature .box img{width:105px;height:82px;position:absolute;top:50%;left:50%;margin-top:-41px;margin-left:-52.5px;}
+    #section-two .feature .boxshadow{border-radius:5px;height:15px;position:relative;top:-10px;z-index:1}
+    #section-three{height:680px;background-color:#66cccc;position:relative;text-align:center;}
+    .slider-control{position:absolute;bottom:100px;width:200px;text-align:center;left:50%;margin-left:-100px;}
+    .slider-dot{display:inline-block;background-color:#336666;width:12px;height:12px;border-radius:6px;margin:0px 10px;cursor:pointer;}
+    .slider-dot.active{background-color:#339999}
+    #footer{height:180px;background-color:rgb(21,28,39)}
+    #footer .column{width:45%;margin-left:10%;display:inline-block;}
+    #footer .column:first-child{margin-left:0;}
+    #footer .column:first-child img{margin-top:60px;width:180px;height:24px;}
+    #footer .copyright{color:rgb(76,92,116);font-size:14px}
+    #layer{background-color:rgba(0,0,0,0.3);position:fixed;top:0;left:0;width:100%;height:100%;z-index:9998;}
+    #infobox{position:fixed;top:50%;left:50%;width:400px;height:150px;margin-top:-75px;margin-left:-200px;background-color:#FFF;border:10px solid #FFD6AE;text-align:center;z-index:9999;}
+    #infobox .content{color:#E07500;display: block;margin-top: 60px;}
+    #section-two .feature:hover{animation:jump 1s ease;-webkit-animation:jump 1s ease;-moz-animation:jump 1s ease;-o-animation:jump 1s ease;}
+    @keyframes jump{0%{top:0px;}
+    50%{top:-100px;}
+    100%{top:0px;}
+    }
+    @-moz-keyframes jump{0%{top:0px;}
+    50%{top:-100px;}
+    100%{top:0px;}
+    }
+    @-webkit-keyframes jump{0%{top:0px;}
+    50%{top:-100px;}
+    100%{top:0px;}
+    }
+    @-o-keyframes jump{0%{top:0px;}
+    50%{top:-100px;}
+    100%{top:0px;}
+    }
+    @media screen and (min-width:768px) and(max-width:1023px){
+        .container{width:100%;}
+    }
+    @media (max-width:767px){
+        body{background-color:rgb(84,196,234);}
+        .container{width:100%;}
+        #nav{display: none;}
+        #section-one:before,#section-one:after{content:"";display:none;}
+        #section-two{display: none;}
+        #loginarea{width:100%;padding:0px;}
+        #login-logo{display:block;}
+        #loginarea .inputbox{display: block;margin-left: auto;margin-right: auto;}
+        #loginarea button{width:290px;}
+        #login-title{display: none;}
+        #login-title2{display: block;}
+        #footer{background-color: transparent;position: absolute;bottom: 20px;height:auto;width:100%;display: none;}
+
+        #footer img{display: none;}
+        #footer .column{width:100%;text-align: center;}
+        #footer p.copyright{color:#FFF;}
+    }
+    </style>
+</head>
+
+<body>
+    <nav id="nav">
+        <div class="container">
+            <img src="__PUBLIC__/images/index/logo.png" id="header-logo" />
+            <ul id="header-list">
+                <!--<li><a>开发团队</a>
+                </li>-->
+                <li><a>关于UniCourse</a>
+                <div id="aboutbox">
+                    UniCourse - Alpha于2013年9月上线，于2014年4月改版，是由中国人民大学学生自发建立的课程辅助学习平台。我们相信普通大学教育能够在互联网的辅助下，改变传统课堂中知识仅从老师单向流向学生的状况，实现教学合一。用户可以充分发挥同伴互助精神，在UniCourse中分享、讨论、消化、积累知识。同时，移动终端也会让学习变成简单而有趣的过程。UniCourse团队5位成员均为中国人民大学信息学院11级本科生。我们相信平等开放的互联网精神能够为每一位用户带来更好的教学体验。我们在行动，也希望每一位有观点的你能够帮助我们成长。请将您对UniCourse的任何意见或建议发送至unicourse@163.com，感谢您的关注！
+                    <img src="__PUBLIC__/images/index/icon.png"/>
+                </div>
+                </li>
+                <li><a>联系我们</a>
+                    <ul class="sublist">
+                        <li><a href="http://page.renren.com/601823400" target="_blank"><img src="__PUBLIC__/images/index/renren.png"/>UniCourse人人公共主页</a></li>
+                        <li><a href="http://weibo.com/u/5069248292" target="_blank"><img src="__PUBLIC__/images/index/weibo.png"/>UniCourse微博主页</a></li>
+                        <li><a href="mailto:unicourse@163.com" target="_blank"><img src="__PUBLIC__/images/index/email.png"/>unicourse@163.com</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <section id="section-one">
+        <div class="container">
+            <div id="loginarea">
+                <div id="login-title">UniCourse - 让教学变得简单有趣</div>
+                <div id="login-logo">
+                    <img src="__PUBLIC__/images/index/logo.png"/>
+                </div>
+                <div id="login-pic">
+                    <img src="__PUBLIC__/images/index/cloud.png">
+                </div>
+                <div id="login-title2">
+                    让教学变得简单有趣
+                </div>
+                <div id="login-form">
+                    <form id="loginform">
+                        <div id="login-inputgroup">                         
+                            <div class="inputbox">
+                                <img src="__PUBLIC__/images/index/user.png" class="inputaddon"/>
+                                <input type="text" placeholder="学工号" id="inUsr" required autofocus/>
+                            </div>
+                            <div class="inputbox">
+                                <img src="__PUBLIC__/images/index/pwd.png" class="inputaddon"/>
+                                <input type="password" placeholder="密码" id="inPw" required/>
+                            </div>
+                        </div>
+                        <div>
+                            <button id="loginButton" title="用UniCourse账号登录">
+                                <img src="__PUBLIC__/images/index/login.png" id="icon-login" /><span>登录</span><span style="display:none">登录中...</span></button>
+                        </div>
+                        <div id="login-infos">
+                            <span style="background-color:#FFF;display:inline-block;width:20px;height:20px;border-radius:10px;line-height:20px;color:rgb(23,162,207);font-weight:bold">i</span>
+                            <span><a href="{:U('Index/rgst/forgetpwpage')}">忘记密码？</a>
+                            </span>
+                            <span style="font-size:12px;margin:0 5px">或</span>
+                            <span><a href="{:U('Index/index/caslogin')}">使用数字人大统一认证登录</a>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="section-two">
+        <div class="container">
+            <div class="feature">
+                <div class="title">多终端</div>
+                <div class="box" style="background-color:#333333;">
+                    <img src="__PUBLIC__/images/index/pic1.png">
+                </div>
+                <div class="boxshadow" style="background-color:#111111">
+                </div>
+            </div>
+            <div class="feature">
+                <div class="title">高效</div>
+                <div class="box" style="background-color:#66cccc;">
+                    <img src="__PUBLIC__/images/index/pic2.png">
+                </div>
+                <div class="boxshadow" style="background-color:#339999">
+                </div>
+            </div>
+            <div class="feature">
+                <div class="title">协作</div>
+                <div class="box" style="background-color:#99cc99;">
+                    <img src="__PUBLIC__/images/index/pic3.png">
+                </div>
+                <div class="boxshadow" style="background-color:#669966">
+                </div>
+            </div>
+            <div class="feature">
+                <div class="title">可定制</div>
+                <div class="box" style="background-color:#ff6633;">
+                    <img src="__PUBLIC__/images/index/pic4.png">
+                </div>
+                <div class="boxshadow" style="background-color:#ff3300">
+                </div>
+            </div>
+        </div>
+    </section>
+<!--
+    < section id = "section-three" > < div > < /div>
+        <div class="slider-control">
+            <span class="slider-dot"></span > < span class = "slider-dot" > < /span>
+            <span class="slider-dot active"></span > < span class = "slider-dot" > < /span>
+        </div >
+        -->
+    </script>
+    <footer id="footer">
+        <div class="container">
+            <div class="column">
+                <img src="__PUBLIC__/images/index/logo.png" />
+                <p class="copyright">
+                    Copyright © 2013-2014 UniCourse, All Rights Reserved.
+                </p>
+            </div>
+            <div class="column"></div>
+        </div>
+    </footer>
+    <div id="layer" style="display:none">
+        <div id="infobox">  
+            <span class="content"></span>       
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+$(document).ready(function() {
+    $("#loginform").submit(function(event) {
+        doLogin();
+        return false;
+    });
+    $(document).click(function(event) {
+        if($(event.target)[0]==$("#layer")[0]) $("#layer").fadeOut('fast');
+    });
+});
+function doLogin(form) {
+    $("#loginButton span").toggle();
+    var usr = $("#inUsr").val();
+    var pw = $("#inPw").val();
+    var url = "{:U('Index/Login/login')}";
+    if (checkInput(usr, pw)) {
+        var data = {
+            usernumber: usr,
+            password: pw
+        };
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            success: function(data, status) {
+                if (data.status == 0) {;
+                }      
+                else if (data.status == 1) {
+                    location.href = "{:U('Teacher/Home/index')}";
+                } else if (data.status == 2) {
+                    location.href = "{:U('Index/Home/index')}";
+                }
+                else if (data.status == 3) {
+                    showInfo("用户名或密码错误");    
+                } else if (data.status == 4) {
+                    showInfo("用户名或密码错误");                 
+                }
+                $("#loginButton span").toggle();
+            },
+            error: function() {
+               showInfo("网络出了问题，请稍后再试");
+            }
+        });
+    } else {
+        $("#loginButton span").toggle();
+    }
+    return false;
+}
+function showInfo(info){
+    $("#infobox .content").text(info);
+    $("#layer").fadeIn('fast');
+    setTimeout(function(){$("#layer").fadeOut('fast');}, 1000);      
+}
+function checkInput(usr, pw) {
+    if (!usr) {
+        $("#inUsr").focus();
+        return false;
+    }
+    if (!pw) {
+        $("#inPw").focus();
+        return false;
+    }
+    if (false) {
+        $("#infobox .content").text("用户名格式不对");
+        $("#infobox").show();
+        $("#inUsr").focus();
+        return false;
+    }
+    return true;
+}
+</script>

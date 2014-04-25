@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+  <include file='App/Tpl/Common/Admin/header.html' />
+	<script>
+    $(document).ready(function() {
+      $("#btn-submit").click(function(event) {
+        /* Act on the event */
+        $.post("{:U('Admin/Student/modify')}", $("#form-submit").serialize(), function(data) {
+          /*optional stuff to do after success */
+          if(data.status==1)
+          {
+            alert("修改成功");
+            location.reload();
+          }else
+          {
+            alert("修改失败");
+            location.reload();
+          }
+        },'json');
+      });
+
+      $("#btn-pwd").click(function(event) {
+        /* Act on the event */
+        $.post("{:U('Admin/Student/modifypwd')}", $("#form-pwd").serialize(), function(data) {
+          /*optional stuff to do after success */
+          if(data.status==1)
+          {
+            alert("修改成功");
+            location.reload();
+          }else
+          {
+            alert("修改失败");
+            location.reload();
+          }
+        },'json');
+      });
+
+
+    });
+  </script>
+
+</head>
+<body>
+  <div>
+    功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Student/index')}">学生管理</a> --> 资料管理
+    <br><hr>
+  </div>
+<div>
+    <form id="form-submit">
+      <div>
+        学号：{$student[0]['sno']}
+        <input type="hidden" name="sno" value="{$student[0]['sno']}">
+      </div>
+      <div>
+        姓名：
+        <input type="text" name="sname" value="{$student[0]['sname']}">
+      </div>
+      <div>
+        性别：
+        <input type="text" name="sex" value="{$student[0]['sex']}">
+      </div>
+      <div>
+        年级：
+        <input type="text" name="sgrade" value="{$student[0]['sgrade']}">
+      </div>
+      <div>
+        学院：
+        <select name="school">
+            <option value="" selected="selected">请选择学院</option>
+            <option value="信息学院">信息学院</option>
+        </select>
+        当前选择：{$student[0]['school']}
+      </div>
+      <div>
+        专业：
+        <select name="smajor">
+            <option value="请选择专业" selected="selected">请选择专业</option>
+            <option value="数学">数学</option>
+            <option value="信息系统与信息管理">信息系统与信息管理</option>
+            <option value="计算机科学与技术">计算机科学与技术</option>
+            <option value="信息安全">信息安全</option>
+          </select>
+        当前选择：{$student[0]['smajor']}
+      </div>
+      <div>
+        个性签名：
+        <textarea name="snotes" cols="30" rows="5">{$student[0]['snotes']}</textarea>
+      </div>
+      <a class="btn" id="btn-submit">修改</a>
+    </form>
+    <form id="form-pwd">
+      <div>
+        密码：
+        <input type="password" name="password">
+      </div>
+      <div>
+        重复密码：
+        <input type="password" name="passwordConfirm">
+      </div>
+      <input type="hidden" name="sno" value="{$student[0]['sno']}">
+      <a class="btn" id="btn-pwd">修改</a>
+    </form>
+      
+    
+  </div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+
+</html>

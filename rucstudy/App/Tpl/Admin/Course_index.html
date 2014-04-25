@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+	<script>
+		$(document).ready(function() {
+			$("#btn-submit").click(function(event) {
+				/* Act on the event */
+				$.post("{:U('Admin/Course/searchjudge')}", $("#form-submit").serialize(), function(data) {
+					/*optional stuff to do after success */
+					if(data.status==1)
+					{
+						location.href="{:U('Admin/Course/searchresult')}?cno="+data.cno;
+					}else
+					{
+						alert("该课程不存在");
+						location.reload();
+					}
+				},'json');
+			});
+		});
+	</script>
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> 课程管理
+		<br><hr>
+	</div>
+	<div>
+		<table border="1">
+			<tr>
+				<td style="width:60px;">课程号</td>
+				<td style="width:120px;">课程名</td>
+				<td style="width:240px;" colspan="7">管理</td>
+			</tr>
+			<?php foreach ($course as $key => $value): ?>
+			<tr>
+				<div>
+					<td>{$value['cno']}</td>
+					<td>{$value['cname']}</td>
+					<!-- <td><a href="{:U('Admin/Course/more',array('cno'=>$value['cno']))}">管理</a></td> -->
+					<td><a href="{:U('Admin/Course/home',array('cno'=>$value['cno']))}">公告</a></td>
+					<td><a href="{:U('Admin/Course/question',array('cno'=>$value['cno']))}">问答</a></td>
+					<td><a href="{:U('Admin/Course/group',array('cno'=>$value['cno']))}">小组</a></td>
+					<td><a href="{:U('Admin/Course/homework',array('cno'=>$value['cno']))}">作业</a></td>
+					<td><a href="{:U('Admin/Course/document',array('cno'=>$value['cno']))}">课件</a></td>
+					<td><a href="{:U('Admin/Course/detail',array('cno'=>$value['cno']))}">资料</a></td>
+					<td><a href="{:U('Admin/Course/assistant',array('cno'=>$value['cno']))}">设置助教</a></td>
+				</div>
+			</tr>
+			<?php endforeach ?>
+		</table>
+	</div>
+	{$page}
+	<br><br>
+
+	<div>
+		搜索课程
+		<div>
+			<form id="form-submit">
+				课程号：<input type="text" name="cno">
+				<a class="btn" id="btn-submit">提交</a>
+			</form>
+		</div>
+	</div>
+
+	<div>
+		<div>
+			<a href="{:U('Admin/Course/register')}" class="btn">添加课程</a>
+		</div>
+	</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html <html ng-app="Unicourse">>
+<head>
+  <title>问题广场</title>
+  <include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+  <include file='App/Tpl/Common/header.html' />
+  <div id="main-container" class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+        <include file='App/Tpl/Common/leftnav-question.html'/>
+      </div>
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+        <div id="main-right">
+          <div class="row">
+            <include file="App/Tpl/Common/raise-question2.html"/>
+          </div>
+          <foreach name='question' item='v'>
+            <div class="row">
+              <include file="App/Tpl/Common/question-listed2.html"/>
+            </div>
+          </foreach>
+          <?php if ($question[0]==null): ?>
+          <div class="row">
+            <div class="panel panel-default">
+              <div class="panel-body">还没有问答呢~~快去提问吧~~</div>
+            </div>
+          </div>
+          <?php endif ?>
+          <div class="page">{$page}</div>
+        </div>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+        <include file="App/Tpl/Common/corner.html" />
+      </div>
+    </div>
+  </div>
+  <div id="info" data-activeitem="#left-allq" data-activeheader="#header-question"></div>
+
+  <include file="App/Tpl/Common/footer.html" />
+  <include file="App/Tpl/Common/focusdelete.html"/>
+</body>
+</html>

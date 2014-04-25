@@ -1,0 +1,59 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>课程广场</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container" style="min-height:700px">
+		<div class="row">
+			<div class="col-lg-12" style="text-align:center">
+				<h1>课程广场</h1>
+			</div>
+		</div>
+		<div class="row">
+			<foreach name='course' item='v'>
+				<div class="thumbnail col-lg-2 col-md-2 col-sm-2 col-xs-2 block1 ellipsis">
+					<span class="hide">{$v.cno}</span>
+					<p>
+						<a href="{:U('Index/Notice/index',array('cno' =>
+							$v['cno']))}">{$v.cname}
+							<br>
+							<small>{$v.tname}</small>
+						</a>
+					</p>
+					<p>
+						<?php if (!$v['isin']): ?>
+						<form class="form-apply">
+							<input type="hidden" name="cno" value="{$v['cno']}">
+							<a  class="btn btn-success btn-apply btn-sm">申请加入</a>
+						</form>
+						<?php endif ?></p>
+				</div>
+			</foreach>
+			<?php if ($course[0]==null): ?>
+			<div>没有课程</div>
+			<?php endif ?></div>
+		<script type="text/javascript">
+		$(".btn-apply").click(function(event) {
+			/* Act on the event */
+			$.post("{:U('Index/Course/apply')}", $(this).closest('form').serialize(), function(data, textStatus, xhr) {
+				/*optional stuff to do after success */
+				if(data.status==1)
+				{
+					alert("申请成功，等待验证");
+					CA(1);
+				}else
+				{
+					alert("已发送申请，再申请一次也是一样的~");
+					CA(1);
+				}
+			});
+		});
+</script>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeheader="#header-course"></div>
+</body>
+</html>

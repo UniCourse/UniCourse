@@ -1,0 +1,135 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>我的小组</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-12" style="text-align:center">
+				<h1>我的小组</h1>
+			</div>
+		</div>
+		<div class="row">
+			<foreach name='group' item='v'>
+				<div class="thumbnail col-lg-2 col-md-2 col-sm-2 col-xs-2 block1 ellipsis">
+					<span class="hide">{$v.gno}</span>
+					<p>
+						<a href="{:U('Index/Group/home',array('gno' =>
+							$v['gno']))}" title="{$v.gname}" target="_blank">
+						{$v.gname}
+							<br>
+							<small>
+								{$v.gnum}人
+								<br>{$v['cname']}</small>
+						</span>
+					</a>
+				</p>
+				<span class="hide">{$v.cno}</span>
+			</div>
+		</foreach>
+		<?php if ($group[0]==null): ?>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">没加小组？</div>
+		<?php endif ?>
+		<div class="thumbnail col-lg-2 col-md-2 col-sm-2 col-xs-2 block1 ellipsis" id="block-addgroup">
+			<button class="btn btn-link" id="btn-addgroup">创建一个</button>
+		</div>
+		<div id="dialog-addgroup" class="thumbnail block2">
+			<div id="innerdlg-addgrp" style="padding:1em">
+				<form id="form-creategroup" class="form form-horizontal">
+					<div class="form-group">
+						<label for="gname" class="control-label">小组名称</label>
+						<input type="text" id="gname" name="gname" class="form-control">
+						<div class="errormessage"></div>
+					</div>
+					<div class="form-group">
+						<label for="cno" id="lb-cname" class="control-label">所属课程</label>
+						<select id="cno" name="cno" class="form-control">
+							<option value="" selected>请选择所属课程</option>
+							<foreach name="course" item="v">
+								<if condition="$v.cno neq $cno">
+									<option value="{$v['cno']}">{$v['cname']}</option>
+								</if>
+							</foreach>
+						</select>
+						<div class="errormessage"></div>
+					</div>
+					<div class="form-group">
+						<label for="gintro" class="control-label">简　　介</label>
+						<textarea  id="gintro"name="gintro" rows="3" placeholder="这里输入简介" style="resize:none;" class="form-control"></textarea>
+						<div class="errormessage"></div>
+					</div>
+					<div class="form-group">
+						<a class="btn pull-right btn-default" id="btn-cancel">取消</a>
+						<a class="btn btn-primary pull-right" id="btn-submitgruop">创建</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="App/Tpl/Common/footer.html" />
+<div id="info" data-activeheader="#header-group"></div>
+</body>
+
+<script>
+	$(document).ready(function() {
+		$("#dialog-addgroup").hide();
+		$("#btn-submitgruop").click(function(){
+			$(".errormessage").text("");
+			if($("#gname").val().replace(/[ ]/g,"")==""){
+				$("#gname").siblings('.errormessage').text("小组要有个名称哟~");
+				$("#gname").focus();
+				return false;
+			}
+			if($("#cno").val()==""){
+				$("#cno").siblings('.errormessage').text("要选一门课程哟~");
+				$("#cno").click();
+				return false;
+			}
+			$.post(
+			"{:U('Index/Group/addAction')}",
+			$("#form-creategroup").serialize(),
+			function(result,status){
+				if(result==0){
+					alert("竟然创建失败了……");
+					CA(1);
+					return false;
+				}				
+				else{
+				alert("创建成功");
+				CAR(1);
+			}
+			},"json"
+			);
+		});
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+		$("#btn-addgroup").click(function(event) {
+			$("#block-addgroup").animate({
+				'width':'200px',
+				'height': '400px'},
+				"fast", function() {					
+					$("#block-addgroup").hide();
+					$("#dialog-addgroup").show();				
+			});
+		});
+		$("#btn-cancel").click(function(event) {
+			$("#dialog-addgroup").hide();
+			$("#block-addgroup").show();
+			$("#block-addgroup").animate({
+				'width': '150px',
+				"height": '120px'},
+				'fast', function() {
+				/* stuff to do after animation is complete */
+			});
+		});
+	});
+</script>
+</html>

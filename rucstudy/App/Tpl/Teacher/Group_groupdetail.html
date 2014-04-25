@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+	<title>小组 {$gname}</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-1 hidden-xs"></div>
+			<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+				<div id="main-right">
+					<div class="panel panel-primary">
+						<div class="panel-heading">{$gname}</div>
+						<div class="panel-body">
+							<div>
+								简介：
+								<br>{$groupdetail.0.gintro}</div>
+							<hr>
+							<div>
+								成员：
+								<br>
+								<foreach name="groupmember" item="v">
+									{$v.sname}：{$v.sno}
+									<br/>
+								</foreach>
+							</div>
+							<hr>
+						
+						
+						<div>
+							小组文件：
+							<table class="table">
+								<foreach name="groupfile" item="vv">
+									<tr>
+										<form action="{:U('Teacher/CommonCourse/groupDownload')}" method="POST" class="inline">
+											<input type="hidden" name="fname" value="{$vv['fname']}">
+											<input type="hidden" name="fno" value="{$vv['fno']}">
+											<input type="hidden" name="cno" value="{:I('cno')}">
+											<td>
+												<input type="submit" name="submit" value="{$vv['fname']}" class="btn btn-link"></td>
+											<td>
+												<small class="pull-right time">{$vv.ftime}</small>
+											</td>
+										</form>
+									</tr>
+								</foreach>
+							</table>
+						</div>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file='App/Tpl/Common/footer.html' />
+
+</body>
+</html>

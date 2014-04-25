@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+		<small class="hide">{$v.qno}{$v.cno}</small>
+		<div>
+			<small class="pull-right time">{$v.raise_time}</small>
+			<span>
+				<a>{$v.sname}</a>
+				:
+			</span>
+			<span class="title">				
+				<a href="{:U('Teacher/Question/questiondetail',array('qno' =>$v['qno'],'cno'=>I('cno')))}" target="_blank">{$v.qtitle}</a>
+			</span>
+		</div>
+		<div  class="ellipsis">{$v.content}</div>
+		<div class="question-bar">
+			<form class="questionnumber">
+				<input type="hidden" name="qno" value="{$v['qno']}">
+				<input type="hidden" name="cno" value="{$cno}">
+				<if condition="$v['isFocus']==0">
+					<a class="focus btn btn-success btn-xs">关注</a>
+					(
+					<span class="attnum">{$v.attnum}</span>
+					人关注)
+					<else/>
+					<a class="cancelfocus btn btn-xs btn-warning">取消关注</a>
+					(
+					<span class="attnum">{$v.attnum}</span>
+					人关注)
+				</if>
+				<a  href="{:U('Teacher/Question/questiondetail',array('qno' =>$v['qno'],'cno'=>I('cno')))}" target="_blank">{$v.rplynum}个回答</a>
+				<if condition="$v['raise_sno']==session('uid')">
+					<a class="btn btn-warning pull-right btn-delete btn-xs">删除</a>
+				</if>
+			</form>
+		</div>
+	</div>
+</div>

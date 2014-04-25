@@ -1,0 +1,103 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>吐槽区</title>
+	<include file='App/Tpl/Common/head.html' />
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+</head>
+<body>
+	<?php if($_SESSION['type']=='student') :?>
+	<include file='App/Tpl/Common/header.html' />
+	<?php  endif ?>
+	<?php if($_SESSION['type']=='teacher') :?>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<?php endif ?>
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
+				<div class="panel panel-success">
+					<div class="panel-heading">我也说几句</div>
+					<div class="panel-body">
+						<form id="form-feedback2" class="form">
+							<div class="form-group">
+								<label for="fbcontent">
+									这里也可以留下您的宝贵意见哟~（虽然说跟点右下角那个图标是一样的
+									<img src="__PUBLIC__/images/kb.gif">）</label>
+								<textarea name="fbcontent" id="fbcontent2" class="form-control"  placeholder="在这里输入您想说的"></textarea>
+								<div id="blankerror2" class="errormessage">请输入内容后吐槽</div>
+							</div>
+							<div class="form-group">
+								<label for="feedback-chk">
+									是否匿名：
+									<input type="radio" name="anonymous" value="0" checked>			
+									否
+									<input type="radio" name="anonymous" value="1">是</label>
+							</div>
+							<input type="hidden" name="title" value="">			
+							<input type="hidden" name="utype" value="1">			
+							<button type="button" class="btn btn-primary" id="btn-submitfeedback2">提交</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div class="panel panel-info">
+					<div class="panel-heading">吐槽区</div>
+					<ul class="list-group">
+						<?php foreach ($feedback as $key =>
+						$value): ?>
+						<li class="list-group-item">
+							<span class="pull-right time">{$value['fbtime']}</span>
+							<?php if($value['anonymous']) {?>
+							匿名用户：
+							<?php }else{ ?>
+							<a>{$value['name']}</a>
+							：
+							<?php } ?>
+							<br>{$value['fbcontent']}</li>
+						<?php endforeach ?>
+						<?php if ($feedback[0]==null): ?>
+						<li class="list-group-item">
+							还没有人吐槽！！这是不是说明我们的系统很好用啊！！
+							<img src="__PUBLIC__/images/dx.gif"></li>
+						<?php endif ?></ul>
+					<div class="panel-footer">
+						<div class="page">{$page}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+</body>
+<script>
+	$(document).ready(function() {
+	$("#blankerror2").hide();
+		$("#btn-submitfeedback2").click(function(event) {			
+			if($("#fbcontent2").val().replace(/\ /g,"")=="")
+			{
+				$("#blankerror2").show();
+				return false;
+			}
+			$("#btn-submitfeedback2").html("<i class='icon-spinner icon-spin'></i>提交中……");
+			$.post("{:U('Index/FeedBack/Add')}", $("#form-feedback2").serialize(), function(data, textStatus, xhr) {
+				if(data.status==1)
+				{
+					alert("提交成功，谢谢您的反馈!");
+					CAR(1);					
+				}else
+				{
+					alert("提交竟然失败了！！……这不又一个槽点么= =");
+					CA(2);
+				}
+				$("#btn-submitfeedback2").html("提交");
+				
+			},'json');
+		});		
+	
+});
+</script>
+</html>

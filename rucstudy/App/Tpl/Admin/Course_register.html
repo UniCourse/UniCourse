@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+	<script>
+		$(document).ready(function(){
+  $("#btn-submit").click(function(){
+    $.post("{:U('Admin/Course/handleregister')}",
+      $("#form-submit").serialize(),
+      function(data){
+        if(data.status==1)
+        {
+          alert("添加课程 成功");
+          location.reload();
+        }
+        else
+        {
+          alert("添加课程 失败");
+          location.reload();
+        }
+      },
+      "json"
+      );
+  });
+});
+	</script>
+</head>
+<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> 添加课程
+		<br><hr>
+	</div>
+<body>
+	<div>
+		<form id="form-submit">
+			<div>
+				课程号：
+				<input type="text" name="cno">（*）
+			</div>
+			<div>
+				课程名称：
+				<input type="text" name="cname">（*）
+			</div>
+			<div>
+				所属学院：
+				<select name="cschool">
+					<option value="" selected="selected">请选择学院</option>
+					<option value="信息学院">信息学院</option>
+				</select>
+			</div>
+			<div>
+				授课教师：
+				<select name="tno">
+					<option value="" selected="selected">请选择老师</option>
+					<?php foreach ($teacher as $key => $value): ?>
+						<option value="{$value['tno']}">{$value['tname']}：{$value['tno']}</option>
+					<?php endforeach ?>
+				</select>（*）
+				<!-- <input type="text" name="tno">（*） -->
+			</div>
+			<div>
+				考核方式：
+				<input type="text" name="checkway">
+			</div>
+			<div>
+				课程简介：
+				<input type="text" name="intro">
+			</div>
+			<div>
+				课程备注：
+				<input type="text" name="cnotes">
+			</div>
+			<a class="btn" id="btn-submit">创建</a>
+		</form>
+	</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

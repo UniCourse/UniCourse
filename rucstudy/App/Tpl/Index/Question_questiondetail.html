@@ -1,0 +1,320 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+  <title>问题</title>
+  <include file='App/Tpl/Common/head.html' />
+  <script src="__PUBLIC__/js/jquery.form.js"></script>
+  <style>
+  .btn-rmdelete{
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0px 1px 0px #FFF;
+    opacity: 0.2;
+    cursor:pointer;
+  }
+  .btn-rmdelete:hover,
+  .btn-rmdelete:focus {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  }
+
+  </style>
+</head>
+<body>
+  <include file='App/Tpl/Common/header.html' />
+  <div id="main-container" class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-1 hidden-xs"></div>
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+        <div id="main-right">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <span class="hide">{$question.0.qno}{$question.0.cno}</span>
+              <a>{$question.0.sname}:</a>
+              <small class="time pull-right">{$question.0.raise_time}</small>
+              <span class="title">{$question.0.qtitle}</span>
+              <div class="well well-sm">{$question.0.content}</div>
+              <div class="question-bar">
+                <form  id="questionnumber">
+                  <input type="hidden" name="qno" value="{$_GET['qno']}"></form>
+              </div>
+              <div class="form-group">
+                <a class="btn btn-primary" href="#dialog-answer">回答</a>
+                <if condition="$isFocus">
+                  <a id="unfocus" class="btn btn-warning">取消关注</a>
+                  <a id="focus" class="btn btn-success hide">关注</a>
+                  <else/>
+                  <a id="focus" class="btn btn-success">关注</a>
+                  <a id="unfocus" class="btn btn-warning hide">取消关注</a>
+                </if>
+                <span>
+                  <span id="focusnum">{$question.0.attnum}</span>
+                  人关注
+                </span>
+              </div>
+            </div>
+            <ul class="reply-list list-group">
+              <foreach name='reply' item='v'>
+                <li class="list-group-item reply-list-item">
+                  <span class="hide">
+                    {$v.qno}{$v.rpno}{$v.weight}
+                    <span class="rpno">{$v.rpno}</span>
+                  </span>
+                  <span>
+                    <a>{$v.sname} :</a>
+                  </span>
+                  <small class="pull-right time">{$v.rplytime}</small>
+                  <span>{$v.rpcontent}</span>
+                  <div >
+                    <form class="inline">
+                      <input type="hidden" name="rpno" value="{$v['rpno']}">
+                      <?php if($v['is_up']){ ?>
+                      <a title="取消赞" class="btn btn-up btn-link zan positive">
+                        <span class="icon-thumbs-up"></span>(<span class="numfor">{$v.upno}</span>)取消赞                    
+                      </a>
+                       <a title="赞" class="btn btn-up btn-link zan negative" style="display:none;">
+                        <span class="icon-thumbs-up-alt"></span>(<span class="numfor"><?php echo $v['upno']-1;?></span>)
+                        赞
+                        
+                      </a>
+                      <?php } ?>                  
+                      <?php if (!$v['is_up']): ?>
+                        <a title="赞" class="btn btn-up btn-link zan negative">
+                        <span class="icon-thumbs-up-alt"></span>(<span class="numfor">{$v.upno}</span>)
+                        赞
+                        
+                      </a>
+                      <a title="取消赞" class="btn btn-up btn-link zan positive" style="display:none;">
+                        <span class="icon-thumbs-up"></span>(<span class="numfor"><?php echo $v['upno']+1;?></span>)取消赞                    
+                      </a>
+                      <?php endif ?>
+                      <a class="accordion-toggle" href="#remark-{$v.rpno}" data-toggle="collapse" data-toggle="collapse">
+                        <span class="icon-edit" title="点击查看或添加评价"></span>评论
+                        (<span id="rmknum-{$v.rpno}">{$v.rmknum}</span>)
+                        
+                      </a>
+                    </form>
+                    <form class="inline">
+                      <input type="hidden" name="rpno" value="{$v['rpno']}">
+                      <if condition="$v['rp_sno']==session('uid')">
+                        <a class=" btn-rpdelete btn-link btn">删除</a>
+                      </if>
+                    </form>
+                  </div>
+                  <div id="remark-{$v.rpno}" class="collapse out">
+                    <table class="table table-bordered table-striped" id="remark-list-{$v.rpno}">
+                      <foreach name='remark' item='vv'>
+                        <if condition='$v["rpno"]==$vv["rpno"]'>
+                          <tr>
+                            <td>
+                             
+                              <span>
+                                <a>{$vv.sname}</a>
+                              </span>
+                              :
+                              <span class="rmcontent">{$vv.rmcontent}</span>
+                              <!-- <form>
+                                <input type="hidden" name="rmno" value="{$vv['rmno']}">
+                                --><if condition="$vv['rm_sno']==session('uid')">
+                                 <span class="btn-rmdelete " title="删除" data-rmno="{$vv['rmno']}" data-rpno="{$v.rpno}">&times;</span>
+                                </if>
+                              <!--</form>-->
+                              <small class="pull-right time">{$vv.rmtime}</small>
+                            </td>
+                          </tr>
+
+                        </if>
+                      </foreach>
+                    </table>
+                    <form  class="form-comment form" action="{:U('Index/ReplyComment/handle')}" method="post">
+                      <div class="form-group">
+                        <textarea class="input-addreply form-control"  placeholder="写下您的评论" id="remarkcontent" name="content" style="resize:none"></textarea>
+                        <div class="errormessage"></div>
+                      </div>
+                      <div class="form-group">
+                        <a class="btn btn-primary btn-comment" data-rpno="{$v.rpno}">评论</a>
+                        <input type="hidden" class="input-rpno"  name="rpno" value="{$v.rpno}">
+                        <input type="hidden" name="cno" value="{:I('cno')}"></div>
+                    </form>
+                  </div>
+                </li>
+              </foreach>
+            </ul>
+            <div class="panel-footer" id="dialog-answer">
+              <form id="form-reply" class="form">
+                <input type="hidden" name="qno" value="{$_GET['qno']}">
+                <input type="hidden" name="cno" value="{:I('cno')}">
+                <textarea id="reply-detail" name="content" class="input-addanswer" placeholder="写下您的回答" ></textarea>
+                <a class="btn btn-primary" id="btn-reply" style="margin-top:5px">发布回答</a>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+        <include file="App/Tpl/Common/corner.html" />
+      </div>
+    </div>
+  </div>
+  <include file="App/Tpl/Common/footer.html" />
+</body>
+</html>
+<script> 
+window.QNO={$_GET['qno']};
+  $(document).ready(function() {      
+    var editor = new UE.ui.Editor();
+    editor.render("reply-detail");   
+    $(".btn-rmdelete").live('click',function(e) {
+      var $t=$(this);
+      var rmno=$(this).attr('data-rmno');
+      $.post("{:U('Index/Question/deleteRemark')}", 
+        {rmno:rmno}, 
+        function(data) {
+          if (data.status == 1) {
+            $t.closest('tr').remove();
+            var $rmnumId=$("#rmknum-"+$t.attr("data-rpno"));
+            var rmnum=parseInt($rmnumId.text());
+            $rmnumId.text(rmnum-1);
+          }
+        }, "json");
+      });
+       /*回答的逻辑*/
+    $("#btn-reply").click(function() {
+      
+      var content=editor.getContentTxt().replace(/\ /g,"");
+      if(content==""){
+        $("#btn-reply").text('发布回答');
+        $("#reply-detail").focus();
+        return false;
+      }
+      $("#btn-reply").text('提交中……');
+      $.post("{:U('Index/Question/replyQuestion')}", $("#form-reply").serialize(), function(data) {
+        console.log(data);
+        if (data.status == 1||data.status==2) {
+          location.reload();
+        } else {
+          if(data.info) alert(data.info);
+          else alert("出错了");
+          $("#btn-reply").text('发布回答');
+        }
+      }, "json");
+    });
+    /*******************************/
+    $(".btn-comment").live('click',function() {
+      var $s=$(this);
+      var $prevgroup=$s.closest('.form-group').prev('.form-group');  
+      var content= $prevgroup.children('textarea').val().replace(/[ ]/g,"");
+      if(content=="") return false;         
+      $s.text('提交中……');
+      $s.closest("form").ajaxSubmit({
+        url : "{:U('Index/Question/commentQuestion')}",
+        type : 'POST',
+        datatype : "json",
+        success : function(data) {
+          console.log(data);
+          if (data.status == 1||data.status==3) {  
+              var rpno=$s.siblings('.input-rpno').val(); 
+              var rmno=data.rmno;
+              var rmtime=data.rmtime;  
+              var newComment="<tr>"
+                            +  "<td>"     
+                            +   "<span>"
+                            +    "<a>"+window.UNAME+"</a>"
+                            +   "</span>"
+                            +  " : "
+                            +  '<span class="rmcontent">'+data.rmcontent+'</span>'
+                            +  '<span class="btn-rmdelete" title="删除" data-rmno="'+data.rmno+'" data-rpno="'+rpno+'">&times;</span>'
+                            +  '<small class="pull-right time">'+data.rmtime+'</small>'
+                            + '</td>'
+                            +'</tr>';
+              $s.closest('form').siblings('table').append(newComment);
+               $s.text('评论');
+              $rmnumId=$("#rmknum-"+$s.attr("data-rpno"));
+              var rmnum=parseInt($rmnumId.text());
+              $rmnumId.text(rmnum+1);             
+              $("#remarkcontent").val('');
+              $prevgroup.children('textarea').val("")
+          } 
+        }
+      });
+    }); 
+    $(".zan").click(function() {
+      var $t=$(this);      
+      $.post("{:U('Index/Question/up')}", 
+        $(this).parent().serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $t.parent().children('.zan').toggle();
+        }
+
+      }, "json");
+    });
+   
+    $(".btn-rpdelete").live('click',function() {
+      $s=$(this);
+      $.post("{:U('Index/Question/deleteReply')}", 
+        $(this).closest('form').serialize(), 
+        function(data) {
+          if (data.status == 1) {
+            $s.closest('.reply-list-item').remove();
+          }  
+          else {
+             if(data.info){
+              alert(data.info);
+             }
+          }
+      }, "json");
+    });
+    $("#focus").click(function(){
+      $.post("{:U('Index/Question/focus')}",{qno:window.QNO},function(data){
+        if(data.status==1){
+          $("#focus").addClass('hide');
+          $("#unfocus").removeClass('hide');
+          $("#focusnum").text(parseInt($("#focusnum").text())+1);
+        }
+      });
+    });
+    $("#unfocus").click(function(){
+       $.post("{:U('Index/Question/unfocus')}",{qno:window.QNO},function(data){
+        if(data.status==1){
+          $("#unfocus").addClass('hide');
+          $("#focus").removeClass('hide');
+          $("#focusnum").text(parseInt($("#focusnum").text())-1);
+        }
+      });
+    });
+    var data={cno:window.CNO};
+    $.get("{:U('Index/Question/getCourseUserList')}",data,function(data){
+      console.log(data);
+      if(data.status==0){
+        var values=[];
+        for (var i=0;i<data.user.length;i++){
+          values.push({val:data.user[i].sname,meta:data.user[i].sno});
+        }
+        var customItemTemplate = "<div><span />&nbsp;<small /></div>";
+
+        function elementFactory(element, e) {
+          var template = $(customItemTemplate).find('span')
+                              .text('@' + e.val).end()
+                              .find('small')
+                              .text("(" + (e.meta) + ")").end();
+          element.append(template);
+        };
+
+        // here is how we use it
+        $('textarea').sew({values: values, elementFactory: elementFactory});
+      }
+    });
+   
+       
+    });      
+   
+    
+
+ 
+</script>

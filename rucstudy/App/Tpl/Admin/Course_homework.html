@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> 作业管理
+		<br><hr>
+	</div>
+	<div id="container">
+
+	<div>
+		课程号：{$cno}
+		<br/>
+		课程名称：{$cname}
+	</div>
+	<div>
+	<div class="main-list">
+		<foreach name="allhomework" item="v">
+			<div class="span7">
+				<span class="hide">作业编号{$v.hno}</span>
+				<a href="{:U('Admin/Course/homeworkDetail',array('cno' =>
+					$_REQUEST['cno'],'cname' => $_REQUEST['cname'],'hno' => $v['hno']))}">{$v.htitle}
+				</a>
+				<br/>
+				<span >截止日期{$v.deadline}</span>
+				<a class="pull-right btn btn-mini" href="{:U('Admin/Course/deleteHomework',array('cno' =>
+					$_REQUEST['cno'],'cname' => $_REQUEST['cname'],'hno' => $v['hno']))}">删除
+				</a>
+				<small class="pull-right">{$v.htime}</small>
+
+			</div>
+		</foreach>
+		{$page}
+
+		<br/>
+	</div>
+</div>
+</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

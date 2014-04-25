@@ -1,0 +1,134 @@
+<!doctype html>
+<html >
+	<head>
+		<meta charset="utf-8" />
+		<title>Unicourse登录</title>
+		<link href="__PUBLIC__/css/index.css" rel="stylesheet" />
+		<script src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+		<script src="__PUBLIC__/js/jquery.cookie.js"></script>
+		<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?6c8c3ce0743dd12cf03043954fddd040";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+	</head>
+	<body>
+		<div id="container">
+			<div id="loginBox">
+				<div id="loginBoxTitle">
+					Unicourse
+				</div>
+				<form action="javascript:;" id="#loginForm" onsubmit="javascript:doLogin(this);">
+				<div>
+					<div id="loginUsrAppend" class="errmsg">
+						<div class="content"></div>
+							<div class="arrow"></div>
+					</div>
+					<div id="loginPwAppend" class="errmsg">
+						<div class="content"></div>
+						<div class="arrow"></div>
+					</div>
+					<div id="loginInfoAppend" class="errmsg"></div>
+					<input id="inUsr" type="text" placeholder="用户名" autofocus/>
+					<input id="inPw" type="password" placeholder="密码"/>		
+				</div>
+				<div style="float:right">					
+					<button id="loginButton"><span>登录</span><span style="display:none">登录中..</span></button>
+				</div>				
+				<div id="loginForgetBox"><a href="LostPw.html"id="loginForget">忘记密码了？</a>	</div>				
+				</form>				
+			</div>		
+		</div>
+	</body>
+</html>
+<script>
+	function doLogin(form){
+		$("#loginButton span").toggle();
+		var usr=$("#inUsr").val();
+		var pw=$("#inPw").val();
+		var url="{:U('Index/Login/login')}";
+		if(checkInput(usr,pw)){
+			var data={usernumber:usr,password:pw};
+			$.ajax({url: url,
+				type:"POST",
+				data:data,
+				success:function(data,status){
+					//验证成功
+					if(data.status==0){;}
+					//验证失败
+					else if(data.status==1){
+						remember(usr,pw);
+						location.href = "{:U('Teacher/Home/index')}";
+					}
+					else if(data.status==2){
+						remember(usr,pw);
+						location.href = "{:U('Index/Home/index')}";
+					}
+					//其他情况
+					else if(data.status==3){
+						$("#loginUsrAppend .content").text("用户不存在");
+						$("#loginUsrAppend").show();
+						$("#inUsr").focus();
+					}
+					else if(data.status==4){
+						$("#loginInfoAppend").text("用户名或密码错误").fadeIn('fast');
+						setTimeout(function(){$("#loginInfoAppend").fadeOut();},1000);
+					}
+					$("#loginButton span").toggle();
+				},
+				error:function(){
+					$("#loginInfoAppend").text("网络有问题，请稍后重试").fadeIn('fast');
+					setTimeout(function(){
+						$("#loginInfoAppend").fadeOut();
+					},1000);
+					$("#loginButton span").toggle();
+				}
+			});
+		}
+		else{$("#loginButton span").toggle();}
+		return false;
+	}
+	function remember(usr,pw){
+		$.cookie('u',usr, {expires: 30});
+		$.cookie('p',pw,{expires:30});
+	}
+	function checkInput(usr,pw){
+		//用户名空
+		if(!usr){
+			$("#loginUsrAppend .content").text("请输入用户名");
+			$("#loginUsrAppend").show();
+			$("#inUsr").focus();
+			return false;
+		}
+		//密码空
+		if(!pw){
+			$("#loginPwAppend .content").text("请输入密码");
+			$("#loginPwAppend").show();
+			$("#inPw").focus();
+			return false;
+		}
+		//用户名格式
+		if(false){
+			$("#loginUsrAppend .content").text("用户名格式不对");
+			$("#loginUsrAppend").show();
+			$("#inUsr").focus();
+			return false;
+		}
+		return true;
+	}
+	$(document).ready(function(){
+		$("input").keyup(function(){
+			$(".errmsg").hide();
+		});	
+		if($.cookie('p')&&$.cookie('u')){
+			$("#inUsr").val($.cookie('u'));
+			$("#inPw").val($.cookie('p'));
+			//doLogin();
+		}
+	});
+</script>

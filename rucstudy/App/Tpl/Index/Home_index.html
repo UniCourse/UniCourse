@@ -1,0 +1,203 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>Unicourse新鲜事</title>
+	<include file='App/Tpl/Common/head.html' />
+	<style>
+	.list-group-item:first-child{border-radius: 0px;border-top:none;}
+	.tabtitle:visited,.tabtitle:active,.tabtitle:focus{outline: none;border:none;}
+	.courseitem .glyphicon-chevron-right{display:none;}
+	.courseitem.cur .glyphicon-chevron-right{display:block;}
+	.list-group-item{overflow: hidden;}
+	</style>
+</head>
+<body ng-app="Unicourse">
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row" ng-controller="news">
+			<div class="col-lg-3 col-md-3 col-sm-3 hidden-xs" id="main-left">
+				<div id="sidebar1" class="panel panel-primary">
+					<div class="panel-heading">
+						<div class="list-icon">
+							<span class="icon-book"></span>
+						</div>
+						我的课程
+					</div>
+					<div class="list-group"  role="menu">
+						<foreach name='course' item='v1'>
+							<span class="hide">{$v1.cno}</span>
+							<a  href="javascript:void(0);" title="{$v1.cname}" class="list-group-item courseitem" data-id="{$v1['cno']}" ng-click="changeCourse({$v1['cno']})" ng-class="{true:'cur'}[cno=={$v1.cno}]">
+								{$v1.cname}
+								<span class="glyphicon glyphicon-chevron-right pull-right"></span>
+							</a>
+						</foreach>
+						<a href="javascript:void(0);" class="list-group-item courseitem" data-id="0" ng-click="changeCourse(0);" ng-class="{true:'cur'}[cno==0]">
+							全部
+							<span class="glyphicon glyphicon-chevron-right pull-right"></span>
+						</a>
+						<?php if ($course[0]==null): ?>				
+						<span class="list-group-item" >
+							没有选修课程（快去<a href="{:U('Index/Course/index')}">添加课程</a>吧）
+						</span>
+						<?php endif ?>
+					</div>
+				</div>
+				<!-- <div id="sidebar2">
+					<div class="panel panel-success">
+						<div class="panel-heading"><div class="list-icon"><span class="icon-calendar"></span></div>日程提醒</div>
+						<ul class="list-group">
+							<foreach name='schedule' item='v2'>
+								<li class="list-group-item">
+									<span class="hide">日程编号{$v2.sdno}</span> <strong>{$v2.rname}</strong>
+									<br>
+									{$v2.rnotes}
+									<br>
+									<small class="time ">截止时间：{$v2.rdeadline}</small>
+								</li>
+							</foreach>
+							<li class="list-group-item">
+								<a href="{:U('Index/Schedule/index')}">查看更多</a>
+							</li>
+							<?php if ($schedule[0]==null): ?>
+							<li class="list-group-item">
+								当前没有日程提醒（试试
+								<a href="{:U('Index/Schedule/index')}">添加日程提醒</a>
+								吧）
+							</li>
+							<?php endif ?></ul>
+					</div>
+				</div> -->
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+				<div id="main-right">
+					<div class='row' style="min-width:450px">
+						<div style="position:relative"> 	
+							<ul class="nav nav-tabs newstype">
+							  <li ng-class="{true:'active'}[type==0]"><a href="javascript:void(0);" data-type='0' ng-click="changeType(0);" class="tabtitle">全部</a></li>
+							  <li ng-class="{true:'active'}[type==1]"><a href="javascript:void(0);" data-type='1' ng-click="changeType(1);" class="tabtitle">问答</a></li>
+							  <li ng-class="{true:'active'}[type==2]"><a href="javascript:void(0);" data-type='2' ng-click="changeType(2);" class="tabtitle">公告</a></li>
+							  <li ng-class="{true:'active'}[type==3]"><a href="javascript:void(0);" data-type='3' ng-click="changeType(3);" class="tabtitle">作业</a></li>
+							  <li ng-class="{true:'active'}[type==4]"><a href="javascript:void(0);" data-type='4' ng-click="changeType(4);" class="tabtitle">课件</a></li>
+							  <span class="pull-right" style="margin-top:10px;margin-right:5px"><a href='{{courseurl}}' ng-hide="cno==0">进入课程>></a></span>
+							</ul>
+							
+						</div>
+						<!-- <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+							<label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3">课程：</label>
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+								<select name="n_cno" id="n_cno" class="form-control">
+									<option value="0">全部</option>
+									<?php foreach ($course as $key =>						
+									$value): ?>
+									<option value="{$value['cno']}">{$value['cname']}</option>
+									<?php endforeach ?></select>
+							</div>
+						</div> -->
+					
+					<div class="list-group" style="border:top:none;">
+						<div class="list-group-item" ng-repeat="n in news" >
+							<a href="">{{n.n_sname}}</a>在<a href="{{n.curl}}">{{n.n_cname}}</a>{{n.eventstr}}:<br>
+							<a href="{{n.contenturl}}">
+							{{n.n_content}}</a>
+						</div>
+						<div class="list-group-item" style="text-align:center;">
+							<button class="btn btn-link" id="btn-more" ng-click="getMoreNews();" ng-hide="stop||onload">加载更多</button>
+							<span ng-show="onload">加载中……</span>
+							<span ng-show="stop">没有更多新消息了</span>
+						</div>
+					</div>
+					</div>												
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 hidden-xs">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeheader="#header-home"></div>
+</body>
+	<script>
+	app.controller('news',function($scope,$http){
+		$scope.type=0;
+		$scope.cno=0;
+		$scope.stop=false;
+		$scope.onload=false;
+		$scope.page=0;
+		$scope.news=[];
+		var perpage=10;
+
+		$scope.getNews=function(add){
+			if($scope.stop) return false;
+			var url=" {:U('Index/Home/morenews')} ";
+			var data={page:$scope.page,cno:$scope.cno,type:$scope.type};
+			$scope.onload=true;
+			$http.post(url,data).success(function(data){
+				
+				if(data.status==0){
+					if(add) $scope.news=$scope.news.concat(data.data);
+					else $scope.news=data.data;
+					if(data.data.length<perpage){
+						$scope.stop=true;						
+					}
+				}
+				else if(data.status==1){
+					$scope.stop=true;
+					if(!add) $scope.news=[];
+				}
+				for(var i=0;i<$scope.news.length;i++){
+					switch($scope.news[i].n_type){
+						case '1':
+						$scope.news[i].eventstr="提了新问题";
+						$scope.news[i].curl=window.APP_URL+"/index/question/index/cno/"+$scope.news[i].n_cno;
+						$scope.news[i].contenturl=window.APP_URL+'/index/question/questiondetail/qno/'+$scope.news[i].n_contentid+'/cno/'+$scope.news[i].n_cno;
+						break;
+						case '2':
+						$scope.news[i].eventstr="发布了新公告";
+						$scope.news[i].curl=window.APP_URL+"/index/notice/index/cno/"+$scope.news[i].n_cno;
+						$scope.news[i].contenturl=window.APP_URL+"/index/notice/index/cno/"+$scope.news[i].n_cno;
+						break;
+						case '3':
+						$scope.news[i].eventstr="布置了新作业";
+						$scope.news[i].curl=window.APP_URL+"/index/homework/index/cno/"+$scope.news[i].n_cno;
+						$scope.news[i].contenturl=window.APP_URL+"/index/homework/index/cno/"+$scope.news[i].n_cno+".html#panel-"+$scope.news[i].n_contentid;
+						break;
+						case '4':
+						$scope.news[i].eventstr="上传了课件";
+						$scope.news[i].curl=window.APP_URL+"/index/document/index/cno/"+$scope.news[i].n_cno;
+						$scope.news[i].contenturl=window.APP_URL+'/index/document/index/cno/'+$scope.news[i].n_cno;
+						break;
+						default:
+						$scope.news[i].eventstr="";
+					}
+				}
+				$scope.onload=false;
+			});
+		}
+		$scope.changeType=function(type){
+			$scope.type=type;
+			$scope.page=0;
+			$scope.stop=false;
+			$scope.getNews();
+		}
+		$scope.changeCourse=function(cno){
+			$scope.cno=cno;
+			$scope.courseurl=window.APP_URL+"/index/notice/index/cno/"+$scope.cno;
+			$scope.page=0;
+			$scope.stop=false;
+			$scope.getNews();
+		}
+		$scope.getMoreNews=function(){
+			$scope.page+=perpage;
+			$scope.getNews(true);
+		}
+		$scope.getNews();
+		$(window).scroll(function(){
+			if($(window).scrollTop() > $(document).height() - $(window).height() - 100) {
+            $scope.getMoreNews();
+        }
+		});
+	});
+			
+		</script>
+</html>

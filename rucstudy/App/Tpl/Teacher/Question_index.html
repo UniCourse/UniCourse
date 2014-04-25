@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+	<title>{$cname}　问题</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+			<include file='App/Tpl/Common/leftnav-teacher.html'/>
+    </div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<include file='App/Tpl/Common/raise-question3.html'/>
+					</div>
+					<foreach name='question' item='v'>
+						<div class="row">
+							<include file='App/Tpl/Common/question-listed3.html'/>
+						</div>
+					</foreach>
+					<?php if ($question[0]==null): ?>
+					<div class="row">
+						<div class="panel panel-default">
+							<div class="panel-body">还没有问答呢~~</div>
+						</div>
+					</div>
+					<?php endif ?>
+					<div class="page">{$page}</div>
+				</div>
+			</div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+        <include file="App/Tpl/Common/corner.html"/>
+      </div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+  <div id="info" data-activeitem="#left-question"></div>
+</body>
+<script type="text/javascript">
+function focus($s){
+	$.post("{:U('Teacher/Question/focus')}", 
+        $s.parent().serialize(), 
+        function(data) {
+       if (data.status == 1) {
+       	$s.removeClass('focus').removeClass('btn-success').addClass('unfocus').addClass('btn-warning').text("取消关注");          
+          var num=parseInt($s.next("span").text());
+          num=num+1;
+          $s.next("span").text(num);
+          $s.unbind('click');
+          $s.click(function(event) {
+          	unfocus($s);
+          });
+         
+        } else {;
+        }        
+      }, "json");	
+}
+function unfocus($s){
+	$.post("{:U('Teacher/Question/unFocus')}", 
+        $s.parent().serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.removeClass('unfocus').removeClass('btn-warning').addClass('focus').addClass('btn-success').text("关注");          
+          var num=parseInt($s.next("span").text());
+          num=num-1;
+          $s.next("span").text(num);
+          $s.unbind('click');
+          $s.click(function(event) {
+          	focus($s);
+          });
+        } else {
+          ;
+        }
+      }, "json");
+}
+$(document).ready(function(){
+	$(".cancelfocus").click(function() {
+      	unfocus($(this));
+    });
+    $(".focus").click(function() {
+    	focus($(this));
+    });	
+/*
+    $(".btn-delete").click(function() {
+    	$s=$(this);
+      $.post("{:U('Teacher/Question/deleteQuestion')}", 
+        $s.closest('form').serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.closest(".row").fadeOut('slow');
+        } else {
+          bootbox.alert("删除竟然失败了,这怎么可能<img src='__PUBLIC__/images/kb.gif'>");
+          CA(2);
+        }
+      }, "json");
+    });*/
+
+    $(".btn-delete").click(function() {
+      var $t=$(this);
+      $.post("{:U('Teacher/Question/deleteQuestion')}", 
+        $t.parent().serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $t.closest('.row').fadeOut('normal',function(){$(this).remove();});
+        } else {;}
+      }, "json");
+    });
+});
+</script>
+</html>
+
+
+		
+				
+	
+

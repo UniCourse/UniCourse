@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> 公告管理
+		<br><hr>
+	</div>
+	<div class="main-list">
+		<foreach name='home' item='v'>
+			<div class="span7">
+				{$v["ncontent"]}
+				<small class="time pull-right" style="float:right">{$v["ntime"]}</small>
+				<form class="form-delete">
+					<input type="hidden" name="nno" value="{$v['nno']}">	
+					<input type="hidden" name="cno" value="{:I('cno')}">	
+					<a class="btn btn-mini pull-right btn-delete">删除</a>
+				</form>
+			</div>
+
+		</foreach>
+		{$page}
+	</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+<script>
+$(document).ready(function(){
+	$(".btn-delete").click(function(event) {
+		/* Act on the event */
+		$.post("{:U('Admin/Course/deleteHome')}", $(this).parent().serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{
+				alert('删除成功');
+			}
+			else
+			{
+				alert('删除失败');
+			}
+			location.reload();
+		},'json');
+	});
+
+});
+</script>
+</html>

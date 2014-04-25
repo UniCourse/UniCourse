@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+<head>
+	<title>{$cname}　作业</title>
+	<include file='App/Tpl/Common/head.html' />
+	<link href="__PUBLIC__/css/datetimepicker.css" rel="stylesheet">
+	<script src="__PUBLIC__/js/bootstrap-datetimepicker.js"></script>
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-teacher.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<a  id="btn-newhomework" class="accordion-toggle title" data-toggle="collapse" href="#dialog-newhomework">点击布置新作业</a>
+							</div>
+							<div id="dialog-newhomework" class="collapse out panel-body">
+								<form id="form-homework" enctype="multipart/form-data">
+									<input type="hidden" name="cno" value="{$cno}">
+									<input type="hidden" name="cname" value="{$cname}">
+									<div class="form-group">
+									<label for="htitle">标题</label>
+									<input type="text" class="form-control" name="htitle" id="htitle">
+									<div class="errormessage"></div>
+								</div>
+								<div class="form-group">
+									<label for="hcontent">内容</label>
+									<textarea id="textarea-hcontent" name="hcontent" classs="form-control" id="hcontent"></textarea>
+									<div class="errormessage"></div>
+								</div>
+								<div class="form-group">
+									<label for="dlyear">截止时间</label>
+									<div class="input-append date form_datetime input-group " id="datetimepicker1"  data-date-format="yyyy-MM-dd hh:mm:ss" >
+										<span class="input-group-addon add-on"> <i class="icon-calendar"></i>
+										</span>
+										<input type="text" class="form-control" name="dlyear" id="dlyear" readonly>
+										
+									</div>
+									<div class="errormessage"></div>
+								</div>
+								<div class="form-group">
+									<div>
+										<label for="upload">上传附件</label>
+										<input name="upload[]" type="file" multiple/>
+										<br/>
+									</div>
+								</div>
+								<div class="form-group">
+								<a id="btn-homework" class="btn btn-primary" style="margin-right:1em">布置</a>
+									<a id="btn-cancelhomework2" class="btn btn-default">取消</a>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<foreach name="allhomework" item="v">
+						<div class="row">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<span class="hide">{$v.hno}</span>
+									<small class="pull-right time">{$v.htime}</small>
+									<a href="{:U('Teacher/Homework/detail',array('cno' =>
+										$_REQUEST['cno'],'cname' => $_REQUEST['cname'],'hno' => $v['hno']))}" class="title" target="_blank">{$v.htitle}
+									</a>
+									<br/>
+									<span >截止日期{$v.deadline}</span>
+									<form class="form-delete inline">
+										<input type="hidden" name="cno" value="{:I('cno')}">
+										<input type="hidden" name="hno" value="{$v['hno']}">
+										<a class="pull-right btn btn-xs btn-delete">删除</a>
+									</form>
+								</div>
+							</div>
+						</div>
+					</foreach>
+					<?php if ($allhomework[0]==null): ?>
+					<div class="row">
+						<div class="panel panel-default">
+							<div class="panel-body">还没有作业呢~~</div>
+						</div>
+					</div>
+					<?php endif ?>
+					<div class="row">
+						<div class="page">{$page}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-homework" ></div>
+</body>
+
+
+	
+
+
+	<script>
+	window.UEDITOR_HOME_URL = '__ROOT__/Data/Ueditor/';
+$(document).ready(function(){
+	UE.getEditor('textarea-hcontent');	
+   $('#datetimepicker1').datetimepicker({
+        language:  'cn',
+        format: 'yyyy-mm-dd hh:ii',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+	
+	$("#btn-homework").click(function(event) {
+		$(".errormessage").text("");
+		if($("#htitle").val()==""){$("#htitle").siblings('.errormessage').text('请输入标题');$("#htitle").focus();return false;}
+		if($("#hcontent").val()==""){$("#hcontent").siblings('.errormessage').text('请输入内容');$("#hcontent").focus();return false;}
+		if($("#dlyear").val()==""){$("#datetimepicker1").siblings('.errormessage').text('日期不能为空');$("#dlyear").focus();return false;}
+		alert("正在处理……");
+		$("#form-homework").ajaxSubmit({
+			url:"{:U('Teacher/Homework/addHomeworkHandle')}",
+			type:"POST",
+			datatype:"script",
+			success:function(data){
+				if(data.status==1)
+				{
+					alert('布置成功');
+					CAR(1);
+				}
+				else
+				{
+					alert('布置失败了……（可能是因为附件过大或者网络问题）');
+					CA(1);
+				}
+			}
+		});
+	});
+
+	$(".btn-delete").click(function(event) {
+		$s=$(this);
+		bootbox.confirm("您确定要删除这个作业?<br>删除后所有学生的提交文件将删除且不能恢复", function(result) {
+			if(result==false){
+				CA(0);
+				return false;
+			}
+			else if(result==true){
+
+		$.post("{:U('Teacher/Homework/deleteHomework')}", $s.closest('form').serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+				{
+					$s.closest('.row').fadeOut('normal');
+				}
+				else
+				{
+					alert('删除失败');
+					CA(1);
+				}				
+		});
+			}
+		}); 
+
+	});
+
+});
+</script>
+</html>

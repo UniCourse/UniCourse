@@ -1,0 +1,76 @@
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script type="text/javascript" src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/Adminindex.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/Adminpublic.css" />
+<link rel="stylesheet" href="__PUBLIC__/css/Adminindex.css" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<base target="iframe"/>
+<head>
+</head>
+<body>
+	<div id="top">
+		<div class="menu">
+			<a href="#">选择按钮</a>
+			<a href="#">选择按钮</a>
+			<a href="#">选择按钮</a>
+			<a href="#">选择按钮</a>
+			<a href="#">选择按钮</a>
+		</div>
+		<div class="exit">
+			<a href="{:U('Admin/Login/logout')}" target="_self">登出</a>
+		</div>
+	</div>
+	<div id="left">
+		<dl>
+			<dt>功能标题</dt>
+			<dd><a href="{:U('Admin/Student/index')}">学生管理</a></dd>
+			<dd><a href="{:U('Admin/Teacher/index')}">老师管理</a></dd>
+			<dd><a href="{:U('Admin/Course/index')}">课程管理</a></dd>
+			<dd><a href="">提问管理</a></dd>
+			<dd><a href="">小组管理</a></dd>
+			<dd><a href="">日程管理</a></dd>
+		</dl>
+		<dl>
+			<dt>RBAC</dt>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="{:U('Admin/Rbac/role')}">角色列表</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="{:U('Admin/Rbac/addRole')}">添加角色</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+		</dl>
+		<dl>
+			<dt>功能标题</dt>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+			<dd><a href="#">功能标题</a></dd>
+		</dl>
+	</div>
+	<div id="right">
+		<iframe name="iframe" src="{:U('Admin/Student/index')}"></iframe>
+	</div>
+</body>
+</html> -->
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		功能导航：后台管理
+		<br><hr>
+	</div>
+	欢迎来到“友学”后台管理平台！
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

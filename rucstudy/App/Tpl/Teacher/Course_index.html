@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+	<title>{$cname}　主页</title>
+	<include file='App/Tpl/Common/head.html' />
+	<link href="__PUBLIC__/css/datetimepicker.css" rel="stylesheet">
+	<script src="__PUBLIC__/js/bootstrap-datetimepicker.js"></script>
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+	<style>
+
+	</style>
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" id="main-left">
+				<include file='App/Tpl/Common/leftnav-teacher.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+				<div id="main-right">
+					<div class="row">
+						<div class="panel panel-warning">
+							<div class="panel-heading">发布公告</div>
+							<div class="panel-body">
+								
+								<form id="form-notice">
+									<textarea id="textarea-notice" class="form-control" name="notice" ></textarea>
+									<input type="hidden" name="cno" value="{:I('cno')}">
+									<a id="btn-notice" class="btn btn-primary pull-right" style="margin-top:5px">发布</a>
+								</form>
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="panel panel-danger" id="dialog-apply">
+							<div class="panel-heading">课程加入申请</div>
+
+							<form id="form-approve" action="{:U('Teacher/Management/approve')}" method="POST">
+								<div class="panel-body">
+									<foreach name="apply" item="v">
+										<div class="tr-apply">
+											<input type="checkbox" name="{$v['sno']}">									
+											{$v.sname}
+											{$v.sno}
+										</div>
+									</foreach>
+								</div>
+
+								<div class="panel-footer">
+									<input type="hidden" name="cno" value="{:I('cno')}">
+									<a id="btn-approve" class="btn btn-danger">批准加入</a>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="panel panel-info">
+							<div class="panel-heading">上传课件</div>
+							<div class="panel-body" style="padding:0px">
+								<form id="form-upload" enctype="multipart/form-data">
+									<input name="upload[]" type="file" id="upload" data-cno="{:I('cno')}" multiple/>
+									<input type="hidden" name="cno" value="{:I('cno')}">
+									<input type="hidden" name="cname" value="{:I('cname')}">
+									<!-- <input type="submit" value="上传" class="btn btn-primary pull-right" >
+									-->
+									<a id="btn-upload" class="btn btn-primary pull-right">上传</a>
+									<div style="clear:both"></div>
+								</form>
+								<div class="progress progress-striped active hide" id="progressbar">
+								  <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+								  </div>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<a  id="btn-newhomework">布置新作业</a>
+							</div>
+							<div id="dialog-newhomework" class="panel-body">
+								<form id="form-homework" enctype="multipart/form-data">
+									<input type="hidden" name="cno" value="{$cno}">
+									<input type="hidden" name="cname" value="{$cname}">
+									<div class="form-group">
+										<label for="htitle">标题</label>
+										<input type="text" class="form-control" name="htitle" id="htitle">
+										<div class="errormessage"></div>
+									</div>
+									<div class="form-group">
+										<label for="hcontent">内容</label>
+										<textarea id="textarea-hcontent" name="hcontent" classs="form-control" id="hcontent"></textarea>
+										<div class="errormessage"></div>
+									</div>
+									<div class="form-group">
+										<label for="dlyear">截止时间</label>
+										<div class="input-append date form_datetime input-group " id="datetimepicker1"  data-date-format="yyyy-MM-dd hh:mm:ss" >
+											<span class="input-group-addon add-on"> <i class="icon-calendar"></i>
+											</span>
+											<input type="text" class="form-control" name="dlyear" id="dlyear" readonly></div>
+										<div class="errormessage"></div>
+									</div>
+									<div class="form-group">
+										<div>
+											<label for="upload">上传附件</label>
+											<input name="upload[]" type="file" multiple/>
+											<br/>
+										</div>
+									</div>
+									<div class="form-group">
+										<a id="btn-homework" class="btn btn-primary pull-right" style="margin-right:1em">布置</a>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-home" ></div>
+</body>
+
+<script>
+	$(document).ready(function() {
+		UE.getEditor('textarea-hcontent');	
+		if($(".tr-apply").text()==""){$("#dialog-apply").addClass('hide');}
+
+	   	$('#datetimepicker1').datetimepicker({
+	        language:  'cn',
+	        format: 'yyyy-mm-dd hh:ii',
+	        weekStart: 1,
+	        todayBtn:  1,
+	        autoclose: 1,
+	        todayHighlight: 1,
+	        startView: 2,
+	        forceParse: 0,
+	        showMeridian: 1
+	    });
+	    if(typeof(FileReader)!='undefined'){
+		   	$("#upload").uploadifive({
+		   		auto:true,
+		   		buttonText:'<div class="uploadifive-text">点击选择文件</div>',
+		   		fileSizeLimit:'30MB',
+		   		uploadScript: "{:U('Teacher/Document/uploadDocument/')}",
+		   		formData:{cno:$("#upload").attr("data-cno")},
+		   		onUploadComplete:function(file,data){
+		   			console.log(file,data);
+		   		}
+		   	});
+		   	$("#btn-upload").remove();
+		   }
+   	$("#btn-notice").click(function(event) {
+		if($("#textarea-notice").val().replace(/\ /g,"")==""){
+			$("#textarea-notice").focus();
+			return false;
+		}
+		/* Act on the event */
+		$.post("{:U('Teacher/Notice/addNotice')}", $("#form-notice").serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{				
+				alert('发布成功，<a href="'+$("#left-announcement").attr("href")+'">点此查看所有公告</a>');
+			}
+			else
+			{
+				alert('发布失败 错误编号：'+data.status);
+				CA(1);
+			}			
+		},'json');
+	});
+	$("#btn-upload").click(function(event) {
+	
+		$("#form-upload").ajaxSubmit({
+			url:"{:U('Teacher/Document/uploadDocument/')}",
+			type:"POST",
+			datatype:"script",
+			beforeSubmit :  showProgress,  
+			success:function(data){
+				if(data.status==1)
+				{
+					$("#progressbar").addClass("hide");
+					alert('上传成功,<a href="'+$("#left-document").attr("href")+'"点击查看所有课件</a>');
+				}
+				else
+				{
+					$("#progressbar").addClass("hide");
+					alert('上传失败');
+					CA(1);
+				}
+				
+			}
+		});
+	});
+
+   $("#btn-homework").click(function(event) {
+		$(".errormessage").text("");
+		if($("#htitle").val()==""){$("#htitle").siblings('.errormessage').text('请输入标题');$("#htitle").focus();return false;}
+		if($("#hcontent").val()==""){$("#hcontent").siblings('.errormessage').text('请输入内容');$("#hcontent").focus();return false;}
+		if($("#dlyear").val()==""){$("#datetimepicker1").siblings('.errormessage').text('日期不能为空');$("#dlyear").focus();return false;}
+		alert("正在处理……");
+		$("#form-homework").ajaxSubmit({
+			url:"{:U('Teacher/Homework/addHomeworkHandle')}",
+			type:"POST",
+			datatype:"script",
+			success:function(data){
+				if(data.status==1)
+				{
+					alert('布置成功');
+					CA(1);
+					location.href=$("#left-homework").attr("href");
+				}
+				else
+				{
+					alert('布置失败了……（可能是因为附件过大或者网络问题）');
+					CA(1);
+				}
+			}
+		});
+	});
+   $("#btn-approve").click(function(event) {
+		/* Act on the event */
+		$("#form-approve").ajaxSubmit({
+			url:"{:U('Teacher/Management/approve')}",
+			type:"POST",
+			datatype:"json",
+			success:function(data){
+				if(data.status==1)
+				{
+					alert('批准成功');
+					CAR(1);
+				}
+				else
+				{
+					alert('批准失败');
+					CAR(1);
+				}
+			}
+		});
+	});
+
+
+	
+		
+
+	});
+</script>
+
+</html>

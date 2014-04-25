@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+</head>
+<body>
+	<div>
+		<table border="1">
+			<tr>
+				<td>ID</td>
+				<td>角色名称</td>
+				<td>角色描述</td>
+				<td>开启状态</td>
+				<td>操作</td>
+			</tr>
+
+			<?php foreach ($role as $key => $value): ?>
+				<tr>
+					<td>{$value.id}</td>
+					<td>{$value.name}</td>
+					<td>{$value.remark}</td>
+					<td>
+						<?php if ($value['status']==1): ?>开启
+							<?php else: ?>关闭
+						<?php endif ?>
+					</td>
+					<td>
+						<a href="">配置权限</a>
+					</td>
+				</tr>
+			<?php endforeach ?>
+			
+		</table>
+	</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>

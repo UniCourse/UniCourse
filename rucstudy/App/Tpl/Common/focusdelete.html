@@ -1,0 +1,65 @@
+<script type="text/javascript">
+/**
+*关注与取消关注的互换逻辑M by SLR 9.15
+*/
+function focus($s){
+  $.post("{:U('Index/Question/focus')}", 
+        $s.closest('form').serialize(), 
+        function(data) {
+       if (data.status == 1) {
+        $s.removeClass('focus').removeClass('btn-success').addClass('unfocus').addClass('btn-warning').text("取消关注");          
+          var num=parseInt($s.siblings('.attnum').text());
+          num=num+1;
+          $s.next("span").text(num);
+          $s.unbind('click');
+          $s.click(function(event) {
+            unfocus($s);
+          });
+         
+        } else {
+          alert("关注失败");
+        }        
+      }, "json"); 
+}
+function unfocus($s){
+  $.post("{:U('Index/Question/unFocus')}", 
+        $s.closest('form').serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.removeClass('unfocus').removeClass('btn-warning').addClass('focus').addClass('btn-success').text("关注");          
+          var num=parseInt($s.siblings('.attnum').text());
+          num=num-1;
+          $s.next("span").text(num);
+          $s.unbind('click');
+          $s.click(function(event) {
+            focus($s);
+          });
+        } else {
+          alert("取消关注竟然失败了= =");
+          CA(1);
+        }
+      }, "json");
+}
+
+$(document).ready(function(){
+     $(".cancelfocus").click(function() {
+        unfocus($(this));
+    });
+    $(".focus").click(function() {
+      focus($(this));
+    });
+     $(".btn-delete").click(function() {
+      $s=$(this);
+      $.post("{:U('Index/Question/deleteQuestion')}", 
+        $s.closest('form').serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.parentsUntil(".row").fadeOut('slow');
+        } else {
+          alert("删除竟然失败了,这怎么可能<img src='__PUBLIC__/images/kb.gif'>");
+          CA(2);
+        }
+      }, "json");
+    });
+});
+</script>

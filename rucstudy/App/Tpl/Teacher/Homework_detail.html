@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+	<title>作业详情</title>
+	<include file='App/Tpl/Common/head.html' />
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-1 hidden-xs"></div>
+			<div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+				<div id="main-right">
+					<div class="panel panel-primary" style="min-width:600px">
+						<div class="panel-heading">{$homework.0.htitle}</div>
+						<div class="panel-body">
+							<small class="pull-right">{$homework.0.htime}</small>
+							{$homework.0.hcontent}
+							<br>
+							<span class="label label-default">截止时间：</span>
+							{$homework.0.deadline}
+							<hr>
+							<div>
+								附件：
+								<?php if ($homeworkfile[0]==null): ?>
+								无
+								<?php endif ?>
+								<table class="table">
+									<foreach name="homeworkfile" item="v">
+										<tr>
+											<td>
+												<form action="{:U('Teacher/CommonCourse/homeworkDownload')}" method="POST" class="inline">
+													<input type="hidden" name="fname" value="{$v['fname']}">
+													<input type="hidden" name="fno" value="{$v['fno']}">
+													<input type="hidden" name="cno" value="{:I('cno')}">
+													<input type="submit" name="submit" value="{$v.fname}" class="btn btn-link pull-left">
+													<small class="pull-right">{$v.ftime}</small>
+												</form>
+												<form class="form-delete inline">
+													<input type="hidden" name="fno" value="{$v['fno']}">
+													<input type="hidden" name="cno" value="{:I('cno')}">
+													<a class="btn btn-mini pull-left btn-delete">删除</a>
+												</form>
+											</td>
+										</tr>
+									</foreach>
+								</table>
+							</div>
+							<hr>
+							<!-- <div>
+								上传附件（最大大小：30MB）：
+								<div class="progress progress-striped active hide" id="progressbar" >
+									<div class="progress-bar"  role="progressbar" style="width: 100%"></div>
+								</div>
+								<form id="form-upload" enctype="multipart/form-data">
+									<input name="upload[]" type="file" multiple/>
+									<input type="hidden" name="hno" value="{:I('hno')}">
+									<input type="hidden" name="cno" value="{:I('cno')}">
+									<a id="btn-upload" class="btn btn-primary">上传</a>
+								</form>
+							</div> -->
+							<hr>
+							<div>
+								已提交情况：
+								<table class="table table-bordered">
+									<tr>
+										<td>文件</td>
+										<td>提交人</td>
+										<td>提交人学号</td>
+										<td>提交时间</td>
+									</tr>
+									<foreach name="homeworkdetail" item="v">
+										<tr>
+											<td>
+												<form action="{:U('Teacher/CommonCourse/studentHomeworkDownload')}">
+													<input type="hidden" name="fname" value="{$v['fname']}">
+													<input type="hidden" name="fno" value="{$v['fno']}">
+													<input type="hidden" name="cno" value="{:I('cno')}">
+													<input class="btn btn-link pull-left" type="submit" name="submit" value="{$v.fname}" style="max-width:300px;overflow:hidden;"></form>
+												<!-- <td>
+												<a href="{:U('Teacher/Course/download',array('furl'=>$v['furl'],'cno'=>$v['cno']))}">{$v.fname}</a>
+												-->
+											</td>
+											<td>{$v.sname}</td>
+											<td>{$v.sno}</td>
+											<td>{$v.ftime}</td>
+										</tr>
+									</foreach>
+								</table>
+							</div>
+							<hr>
+							<div>
+								未提交学生名单：
+								<br/>
+								<table class="table table-bordered">
+									<tr>
+										<td>姓名</td>
+										<td>学号</td>
+									</tr>
+									<foreach name="notupload" item="v">
+										<tr>
+											<td>{$v.sname}</td>
+											<td>{$v.sno}</td>
+										</tr>
+									</foreach>
+								</table>
+							</div>
+						</div>
+					</div>
+
+	
+					<div></div>
+
+				</div>
+			</div>
+
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+	<include file='App/Tpl/Common/footer.html' />
+
+</body>
+	<script>
+$(document).ready(function(){
+	$("#btn-upload").click(function(event) {
+		$("#progressbar").removeClass('hide');
+		/* Act on the event */
+		$("#form-upload").ajaxSubmit({
+			url:"{:U('Teacher/Homework/uploadHomeworkFile')}",
+			type:"POST",
+			datatype:"script",
+			success:function(data){
+				if(data.status==1)
+				{
+					alert('上传成功');
+				}
+				else
+				{
+					alert('上传失败');
+				}
+				CA(1);
+				location.reload();
+			}
+		});
+	});
+
+	$(".btn-delete").click(function(event) {
+		/* Act on the event */
+		$.post("{:U('Teacher/Homework/deleteHomeworkFile')}", $(this).parent().serialize(), function(data, textStatus, xhr) {
+			/*optional stuff to do after success */
+			if(data.status==1)
+			{
+				alert('删除成功');
+			}
+			else
+			{
+				alert('删除失败');
+			}
+			location.reload();
+		},'json');
+	});
+
+});
+</script>
+</html>

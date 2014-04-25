@@ -1,0 +1,255 @@
+<!doctype html>
+<html ng-app="Unicourse">
+<head>
+	<title>{$cname}　作业</title>
+	<include file='App/Tpl/Common/head.html' />
+	<script src="__PUBLIC__/js/jquery.form.js"></script>
+</head>
+<body>
+	<include file='App/Tpl/Common/header.html' />
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-course.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<foreach name="homework" item="v">
+						<div class="panel panel-default" id="panel-{$v['hno']}">
+							<div class="panel-heading">
+								<span class="hide">{$v['hno']}</span>
+								<a  class="accordion-toggle title homework-title" data-toggle="collapse"  href="#collapse-{$v['hno']}" id="hno-{$v['hno']}" >{$v.htitle}</a>
+								<if condition="$v['issubmit']==1">
+									<span id="hw-check-{$v['hno']}" class="hw-check finished pull-right">已提交</span>
+									<else/>
+									<span id="hw-check-{$v['hno']}" class="hw-check unfinished pull-right"></span>
+								</if>
+								<span class="hide deadline">{$v.deadline}</span>
+							</div>
+							<div class="panel-body collapse out" id="collapse-{$v['hno']}">
+								<div>
+									<small class="time pull-right">{$v.htime}</small>
+									<dpan class="content">{$v.hcontent}</span>									
+								</div>
+								<div>
+									<label class="label label-default">截止日期：</label>
+									<span id="deadline-{$v['hno']}">{$v.deadline}</span>
+								</div>
+								<hr>
+								<div>
+									<span class="fujian">附件:</span>
+									<table class="table">
+										<foreach name="v['homeworkfile']" item="vv">
+											<tr>
+												<td>
+													<form action="{:U('Index/Common/download')}" method="POST" class="inline">
+														<input type="hidden" name="fname" value="{$vv['fname']}">													
+														<input type="hidden" name="furl" value="{$vv['furl']}">													
+														<input type="submit" name="submit" value="{$vv['fname']}" class="btn btn-link " title="上传时间：{$vv.ftime}"></form>
+													<span class="hide">{$vv.ftime}</span>
+												</td>
+											</tr>
+										</foreach>
+										<?php if ($vv==null): ?>
+										无
+										<?php endif ?></table>
+								</div>
+								<if condition="$v['issubmit']==1">
+									<div>
+										<span>已提交：<br>
+											<form action="{:U('Index/Common/download')}" method="POST" class="inline">
+											<input type="hidden" name="fname" value="{$v['fname']}">
+											<input type="hidden" name="furl" value="{$v['furl']}">
+											<input type="submit" name="submit" value="{$v['fname']}" class="btn btn-link "></form>
+										</span>
+										<form class="delete-form inline">
+											<input type="hidden" name="cno" value="{:I('cno')}">
+											<input type="hidden" name="hno" value="{$v['hno']}">
+											<a href="#" class="delete-homework btn btn-warning btn-small">删除</a>
+										</form>
+									</div>
+									<div class="hide">
+										提交作业（最大30MB）：
+										<form class="form-upload" enctype="multipart/form-data" method="post">
+											<input name="upload" type="file"  class="input-file"/>
+											<input name="cno" type="hidden" value="{$cno}">
+											<input name="hno" type="hidden" value="{$v['hno']}">
+											<a class="btn btn-primary btn-upload" type="submit">提交</a>
+										</form>
+									</div>
+									<else/>
+									<div>
+										提交作业（最大30MB）：
+										<form class="form-upload" enctype="multipart/form-data" method="post">
+											<input name="upload" type="file"  class="input-file"/>
+											<input name="cno" type="hidden" value="{$cno}">
+											<input name="hno" type="hidden" value="{$v['hno']}">
+											<a class="btn btn-primary btn-upload" type="submit">提交</a>
+										</form>
+									</div>
+								</if>
+							</div>
+						</div>
+					</foreach>
+					<?php if ($homework[0]==null): ?>
+					<div class="panel panel-default">
+						<div class="panel-body">老师还没布置作业诶~~走喽，出去玩儿喽~~</div>
+					</div>
+					<?php endif ?>
+					<div class="panel-footer">
+						<div class="page">{$page}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+
+	<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-homework" data-activeheader="#header-course" data-domain=""></div>
+	<script>
+	$(document).ready(function() {
+		$(".finished").closest('.panel').addClass('panel-success');
+		$.each($(".unfinished"), function(index, val) {
+			$s = $(this);
+			$date = $s.siblings('.deadline').text();
+
+			$s.text(daojishi($date));
+
+			if (checkDate($date)) {
+				$s.closest('.panel').addClass('panel-warning');
+			} else {
+				$s.closest('.panel').addClass('panel-danger');
+			}
+
+		});
+
+		$(".btn-upload").click(function() {
+			var $s = $(this);
+			file = $s.siblings('.input-file').val();
+			if (file == "") {
+				alert('先选个文件嘿<img src="__PUBLIC__/images/kb.gif"/>');
+				CA(1);
+				return false;
+			}
+			$s.text('提交中……');
+			$s.closest('form').ajaxSubmit({
+				url : "{:U('Index/Homework/upload')}",
+				type : 'POST',
+				datatype : "script",
+				success : function(data) {
+					$s.text('提交');
+					if (data.status == 1) {
+						alert("上传成功");
+						var dm=document.domain;
+						var curhw=$s.siblings('input[name=hno]').val();
+						//$.cookie('curHomework',curhw,{path:'/',domain:dm});
+						CA(1);						
+						var s=location.href;
+						var index=s.search(".html");
+						var newhref=s.substring(0,index)+"/hno/"+curhw+".html";
+						location.href=newhref;						
+					} else {
+						alert("上传失败 原因：" + data.status);
+						CA(1);
+					}
+				}
+			});
+		});
+
+		$(".delete-homework").click(function() {
+			$s = $(this);
+			$s.closest('form').ajaxSubmit({
+				url : "{:U('Index/Homework/deleteHomework')}",
+				type : 'POST',
+				datatype : "json",
+				success : function(data) {
+					if (data.status == 1) {
+						$s.parent().parent().hide();
+						$s.parent().parent().next(".hide").removeClass('hide');
+						location.reload();
+					} else {
+						alert("删除失败");
+						CA(1);
+					}
+				}
+			});
+		});
+		//以下为打开某一作业面板的逻辑
+		//如果是从新鲜事里打开，传一个参数
+		//如果是刚提交的作业，从Cookie读取
+		/*var cookiehw=$.cookie('curHomework');
+		if(cookiehw){
+			var t="#hno-"+cookiehw;
+			$(t).click();
+			var s=location.href;
+			if(s.charAt(s.length-1)=="l"&&s.charAt(s.length-2)=="m"){
+				location.href=s+"#collapse-"+cookiehw;
+			}
+		}*/
+		if($("#hno-{$hno}").length>0){
+			$("#hno-{$hno}").click();
+			var s=location.href;
+			if(s.charAt(s.length-1)=="l"&&s.charAt(s.length-2)=="m"){
+				location.href=s+"#panel-"+"{$hno}";
+			}
+		}
+
+	});
+
+			function checkDate(data) {
+				//data：截止日期
+				var a = data.split(RegExp(":|-| ", "g"));
+				var date1 = new Date(a[0], Number(a[1]) - 1, Number(a[2]), a[3], a[4], a[5]);
+				var date2 = new Date();
+				if (date2 > date1) {
+					return false;
+				}
+				return true;
+			}
+
+			function daojishi(data) {
+				//data：截止日期
+				var a = data.split(RegExp(":|-| ", "g"));
+				var date1 = new Date(a[0], Number(a[1]) - 1, Number(a[2]), a[3], a[4], a[5]);
+				var date2 = new Date();
+				var value;
+				//要返回的那个东西（格式：过期/还剩 X天X分X秒）
+
+				var days;
+				var leave1;
+				var hours;
+				var leave2;
+				var minutes;
+				var leave3;
+				var seconds;
+
+				if (date2 <= date1) {
+					date3 = date1 - date2;
+					days = Math.floor(date3 / (24 * 3600 * 1000));
+					leave1 = date3 % (24 * 3600 * 1000);
+					hours = Math.floor(leave1 / (3600 * 1000));
+					leave2 = leave1 % (3600 * 1000);
+					minutes = Math.floor(leave2 / (60 * 1000));
+					leave3 = leave2 % (60 * 1000);
+					seconds = Math.round(leave3 / 1000);
+					value = "还剩" + days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+				} else if (date2 > date1) {
+					date3 = date2 - date1;
+					days = Math.floor(date3 / (24 * 3600 * 1000));
+					leave1 = date3 % (24 * 3600 * 1000);
+					hours = Math.floor(leave1 / (3600 * 1000));
+					leave2 = leave1 % (3600 * 1000);
+					minutes = Math.floor(leave2 / (60 * 1000));
+					leave3 = leave2 % (60 * 1000);
+					seconds = Math.round(leave3 / 1000);
+					value = "您已超时 " + days + "天 " + hours + "时 " + minutes + "分 " + seconds + "秒 ";
+				}
+				return value;
+			}
+
+		</script>
+</body>
+</html>

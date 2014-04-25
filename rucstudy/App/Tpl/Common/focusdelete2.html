@@ -1,0 +1,22 @@
+<script type="text/javascript">
+/**
+*取消我关注的问题
+*/
+
+function unfocus($s){
+  $.post("{:U('Index/Question/unFocus')}", 
+        $s.closest('form').serialize(), 
+        function(data) {
+        if (data.status == 1) {
+          $s.parentsUntil(".row").fadeOut('slow', function() {            
+          });          
+        } 
+      }, "json");
+}
+
+$(document).ready(function(){
+     $(".cancelfocus").click(function() {
+        unfocus($(this));
+    });   
+});
+</script>

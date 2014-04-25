@@ -1,0 +1,148 @@
+<div  id="corner" style="position:fixed;">
+	<div id="btn-totop" class="corner-btn">
+		<a href="#" title="回顶部" onclick="goTop();return false;">
+			<span class=" icon-circle-arrow-up icon-3x"></span>
+		</a>
+	</div>
+	<div id="btn-feedback" class="corner-btn" data-toggle="modal" data-target="#modal-feedback" title="意见反馈">
+		<a href="#">
+			<span class="icon-edit-sign icon-3x"></span>
+		</a>
+	</div>
+</div>
+
+<?php if($_SESSION['type']=='student') :?>
+<div class="modal fade" id="modal-feedback">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btn-closemodal">&times;</button>
+				<h4 class="modal-title">意见与建议</h4>
+			</div>
+			<form id="form-feedback" class="form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="fbcontent">
+							我们接受各种形式各种内容的反馈，您的意见与建议是我们前进的不竭动力~
+							<img src="__PUBLIC__/images/shy.gif"></label>
+						<textarea name="fbcontent" id="fbcontent" class="form-control"  placeholder="在这里输入您想说的" style="height:150px"></textarea>
+						<div class="errormessage" id="blankerror">你好像啥都没写唉<img src="__PUBLIC__/images/kb.gif"></div>
+					</div>
+					<div class="form-group">
+						<label for="feedback-chk">
+							是否匿名：
+							<input type="radio" name="anonymous" value="0" checked>
+							否
+							<input type="radio" name="anonymous" value="1">是</label>
+					</div>
+					<div class="form-group">
+						您的吐槽将于
+						<a href="{:U('Index/FeedBack/Index')}" target="_blank">吐槽区</a>
+						中呈现，有什么想说的尽情说出来吧~<img src="__PUBLIC__/images/dx.gif">
+						<br>
+						<a href="{:U('Index/FeedBack/Index')}" target="_blank">看看大家都在说啥</a>
+						<img src="__PUBLIC__/images/lks.gif"></div>
+						<input type="hidden" name="title" id="feedback-title" value="">			
+				<input type="hidden" name="utype" value="1">
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="btn-submitfeedback">提交</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$("#blankerror").hide();
+		$("#btn-submitfeedback").click(function(event) {			
+			if($("#fbcontent").val().replace(/\ /g,"")==""){
+				$("#blankerror").show();
+				return false;
+			}
+			$("#btn-submitfeedback").html("<i class='icon-spinner icon-spin'></i>提交中……");
+			$.post("{:U('Index/FeedBack/Add')}", $("#form-feedback").serialize(), function(data, textStatus, xhr) {
+				if(data.status==1)
+				{
+					alert("提交成功，谢谢您的反馈!");
+					$("#btn-closemodal").click();
+					CA(1);					
+				}else
+				{
+					alert("卧槽……提交竟然失败了！！……这不可能= =");
+					CA(2);
+				}
+				$("#btn-submitfeedback").html("提交");
+				
+			},'json');
+		});		
+	});
+</script>
+<?php  endif ?>
+<?php if($_SESSION['type']=='teacher') :?>
+<div class="modal fade" id="modal-feedback">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btn-closemodal">&times;</button>
+				<h4 class="modal-title">意见与建议</h4>
+			</div>
+			<form id="form-feedback" class="form">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="fbcontent">
+							我们接受各种形式各种内容的反馈，您的意见与建议是我们前进的不竭动力!</label>
+						<textarea name="fbcontent" class="form-control"   placeholder="在这里输入您想对我们说的" style="height:150px" id="fbcontent"></textarea>
+						<div class="errormessage" id="blankerror">请输入内容</div>
+					</div>
+					<div class="form-group">
+						<label for="feedback-chk">
+							是否匿名：
+							<input type="radio" name="anonymous" value="0" checked>
+							否
+							<input type="radio" name="anonymous" value="1">是</label>
+					</div>
+					<div class="form-group">
+						您的意见与建议将在<a href="{:U('Index/FeedBack/Index')}" target="_blank">意见反馈</a>板块显示，如想私信请发邮件到unicourse@163.com或者直接联系我们，我们将尽快处理
+					</div>
+					<input type="hidden" name="title" id="feedback-title" value="">			
+				<input type="hidden" name="utype" value="2">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="btn-submitfeedback">提交</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$("#blankerror").hide();
+		$("#btn-submitfeedback").click(function(event) {
+			if($("#fbcontent").val().replace(/\ /g,"")==""){
+				$("#blankerror").show();
+				return false;
+			}
+			$("#btn-submitfeedback").html("<i class='icon-spinner icon-spin'></i>提交中……");
+			$.post("{:U('Index/FeedBack/Add')}", $("#form-feedback").serialize(), function(data, textStatus, xhr) {
+				if(data.status==1)
+				{
+					alert("提交成功，感谢您的反馈！我们将及时处理");
+					$("#btn-closemodal").click();
+					CA(1);					
+				}else
+				{
+					alert("抱歉，提交失败了……如果想联系我们也可以发邮件到unicourse@163.com，谢谢您的支持");
+					CA(2);
+				}
+				$("#btn-submitfeedback").html("提交");
+				
+			},'json');
+		});		
+	});
+
+</script>
+<?php  endif ?>

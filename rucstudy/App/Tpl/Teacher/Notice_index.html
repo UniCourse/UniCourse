@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+	<title>{$cname}　公告</title>
+	<include file='App/Tpl/Common/head.html' />
+</head>
+<body>
+	<include file='App/Tpl/Common/header-teacher.html' />
+	<div class="hide" id="coursenumber">{$cno}</div>
+	<div id="main-container" class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-10" id="main-left">
+				<include file='App/Tpl/Common/leftnav-teacher.html'/>
+			</div>
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-10">
+				<div id="main-right">
+					<div class="row">
+						<div class="panel panel-success">
+							<div class="panel-heading">发布公告</div>
+							<div class="panel-body">
+								<form id="form-notice">
+									<textarea id="textarea-notice" name="notice" class="form-control" ></textarea>
+									<input type="hidden" name="cno" value="{:I('cno')}">							
+									<!-- <input type="submit" name="submit" value="发布" class="btn btn-primary pull-right">							
+									-->
+									<a id="btn-notice" class="btn btn-primary" style="margin-top:5px;float:right">发布</a>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="panel panel-primary">
+							<div class="panel-heading">公告板</div>
+							<ul class="list-group item" id="noticelist">
+								<foreach name='home' item='v'>
+									<li class="list-group-item">			
+										<span class="content">{$v["ncontent"]}</span>
+										<br><small class="time">{$v["ntime"]}</small><a class="btn btn-mini btn-delete btn-xs" data-nno="{$v['nno']}" data-cno="{:I('cno')}">删除</a>
+									</li>
+								</foreach>
+								<?php if ($home[0]==null): ?>							
+								<li class="list-group-item">
+									<div class="panel-body">还没有公告呢~~</div>
+								</li>
+								<?php endif ?></ul>
+							<!--<div class="panel-footer">
+								<div class="page">{$page}</div>
+							</div>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+				<include file="App/Tpl/Common/corner.html" />
+			</div>
+		</div>
+	</div>
+		<include file="App/Tpl/Common/footer.html" />
+	<div id="info" data-activeitem="#left-announcement"></div>
+</body>
+
+<script>
+$(document).ready(function(){
+	$(".btn-delete").live('click',function(event) {
+		var $t=$(this);
+		var data={nno:$t.attr("data-nno"),cno:$t.attr("data-cno")};
+		$.post("{:U('Teacher/Notice/deleteNotice')}",data, function(data, textStatus, xhr) {
+			if(data.status==1)
+			{
+				$t.closest('.list-group-item').hide().remove();
+			}
+			else{
+				if(data.info) alert(data.info);
+			}
+		},'json');
+	});
+	
+	$("#btn-notice").click(function(event) {
+		if($("#textarea-notice").val().replace(/\ /g,"")==""){
+			$("#textarea-notice").focus();
+			return false;
+		}
+		$("#btn-notice").text("发布中……");
+		$.post("{:U('Teacher/Notice/addNotice')}", $("#form-notice").serialize(), function(data, textStatus, xhr) {
+			if(data.status==1||data.status==2)
+			{	
+				var newNotice='<li class="list-group-item">'			
+								+	'<span class="content">'
+								+		data.content
+								+	'</span>'
+								+	'<br>'
+								+	'<small class="time">'
+								+		data.time
+								+	'</small>'
+								+	'<a class="btn btn-mini btn-delete btn-xs" data-nno="'
+								+		data.nno
+								+		'">删除</a></li>';
+
+				$(newNotice).prependTo('#noticelist');	
+				$("#textarea-notice").val("");	
+						
+			}
+			else
+			{
+				data.info&&alert(data.info);
+			}
+			$("#btn-notice").text("发布");			
+		},'json');
+	});
+});
+</script>
+</html>

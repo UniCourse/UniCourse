@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<include file='App/Tpl/Common/head.html' />
+	<include file='App/Tpl/Common/Admin/header.html' />
+	<script>
+		$(document).ready(function(){
+  $("#btn-submit").click(function(){
+    $.post("{:U('Admin/Course/setassistant')}",
+      $("#form-submit").serialize(),
+      function(data){
+        if(data.status==1)
+        {
+          alert("设置助教 成功");
+          location.reload();
+        }
+        else
+        {
+          alert("该助教不存在");
+          location.reload();
+        }
+      },
+      "json"
+      );
+  });
+
+  $(".btn-delete").click(function(){
+    $.post("{:U('Admin/Course/deleteassistant')}",
+      $(this).parent().serialize(),
+      function(data){
+        if(data.status==1)
+        {
+          alert("删除助教 成功");
+          location.reload();
+        }
+        else
+        {
+          alert("删除助教 失败");
+          location.reload();
+        }
+      },
+      "json"
+      );
+  });
+});
+	</script>
+</head>
+<body>
+	<div>
+		功能导航：<a href="{:U('Admin/Home/index')}">后台管理</a> --> <a href="{:U('Admin/Course/index')}">课程管理</a> --> 设置助教
+		<br><hr>
+	</div>
+	<div id="container">
+
+	<div>
+		课程号：{$cno}
+		<br/>
+		课程名称：{$cname}
+	</div>
+	<br>
+	<div>
+	<div>
+		现有助教：
+		<?php foreach ($assistant as $key => $value): ?>
+			<div>
+				<form class="form-delete">
+					{$value['sno']}：{$value['sname']}
+					<input type="hidden" name="sno" value="{$value['sno']}">
+					<a class="btn btn-delete" id="btn-delete">删除</a>
+				</form>
+			</div>
+		<?php endforeach ?>
+	</div>
+	<br>
+	<div class="main-list">
+		<div>
+			<div>添加助教</div>
+			<form id="form-submit">
+				助教学号：
+				<input type="text" name="sno">
+				<input type="hidden" name="cno" value="{$cno}">
+				<a class="btn" id="btn-submit">创建</a>
+			</form>
+		</div>
+		
+	</div>
+</div>
+</div>
+</body>
+<include file="App/Tpl/Common/footer.html" />
+</html>
